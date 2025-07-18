@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import RadarMapWrapper from '@/components/RadarMapWrapper';
 import DateTimeBlock from '@/components/DateTimeBlock';
 import MixedBarChart from '@/components/MixedBarChart';
+import {project_name_to_max_mwh} from '@/components/projectData';
 
 //import Dial from '@/components/Dial'; 
 
@@ -101,10 +102,12 @@ const weather_id_mappings: Record<number, Record<string, string>> = {
 const blocks:any = {
 
     logo: {
-        block: <div className='h-full'><div className="flex justify-center items-center space-x-1 h-full">
-                <img src="/rivian_logo.png" width={80} alt="Rivian Logo" />X
-                <img src="/clearloop_infinity_white.png" width={80} alt="Clearloop Logo" />
-            </div></div>,
+        block: <div className='h-full'><div className="flex justify-center items-center space-x-1">
+                <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />X
+                <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+            </div>
+            <h2 className='text-sm'>#RECS</h2>
+            </div>,
         coor: { 9: [0, 0], 6: [0, 0], 4: [0, 0] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 1, 6: 1, 4: 1 },
@@ -156,12 +159,12 @@ const blocks:any = {
         height: { 9: 3, 6: 2, 4: 2 },
     },
 
-    current_production_capacity_visualization: {
-        block: <div><p>c.p.c.v</p></div>,
-        coor: { 9: [0, 1], 6: [0, 1], 4: [0, 2] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+    // current_production_capacity_visualization: {
+    //     block: <div><p>c.p.c.v</p></div>,
+    //     coor: { 9: [0, 1], 6: [0, 1], 4: [0, 2] },
+    //     width: { 9: 2, 6: 2, 4: 2 },
+    //     height: { 9: 3, 6: 3, 4: 3 },
+    // },
 
     sunrise_sunset_on_spinning_globe: {
         block: <div></div>,
@@ -181,14 +184,14 @@ const blocks:any = {
 
     current_mwh: {
         block: <div><p>current MWh output per project</p></div>,
-        coor: { 9: [0, 4], 6: [0, 4], 4: [0, 5] },
+        coor: { 9: [0, 1], 6: [0, 1], 4: [0, 2] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
 
     current_carbon_avoided: {
         block: <div><p>current carbon avoided</p></div>,
-        coor: { 9: [2, 4], 6: [2, 4], 4: [2, 5] },
+        coor: { 9: [0, 4], 6: [0, 4], 4: [0, 5] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
@@ -214,8 +217,8 @@ const blocks:any = {
         height: { 9: 1, 6: 1, 4: 1 },
     },
 
-    recs: {
-        block: <div><p>current saved</p></div>,
+    cumulative_production: {
+        block: <div><p>cumulative_production</p></div>,
         coor: { 9: [4, 6], 6: [4, 6], 4: [0, 10] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 1, 6: 1, 4: 1 },
@@ -386,6 +389,31 @@ function calculateForecastHourLabel(forecastUtcSeconds: number) {
   return `${diffHours}h`;
 }
 
+function formatDecimal(unformatted_num: string) {
+
+    const cost_string = unformatted_num;
+    const cost_string_parsed = cost_string.split('.');
+    const dollar_string = cost_string_parsed[0];
+    //commas
+    let dollar_string_commas = "";
+    for(let i=dollar_string.length-1; i>=0; i--) {
+
+        if((i)%3==0 && i!=0) {
+            dollar_string_commas = "," + dollar_string_commas;
+        }
+
+
+        dollar_string_commas = dollar_string[i] + dollar_string_commas;
+
+        
+    }
+    const cent_string = cost_string_parsed[1] ?? "00";
+    const cost_to_display = dollar_string_commas + "." + cent_string.substring(0, 2);
+
+    return cost_to_display;
+
+}
+
 
 
 
@@ -426,6 +454,25 @@ export default function Dashboard({ stats }: { stats: any }) {
 
 
         //conditional attributes
+        
+
+
+        if(block === "logo") {
+
+            if(stats) {
+                blocks[block].block = 
+                <div className='h-full'>
+                    <div className="flex justify-center items-center space-x-1">
+                            <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />X
+                            <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+                    </div>
+                    <h2 className='text-xs mt-2' style={{ color: "#F7E15D" }}>RECs: {stats.total.RECs.toLocaleString('en-US')}</h2>
+                </div>
+            }
+
+        }
+
+
         //date and time
         if(block === "date_and_time") {
             if(coordinate_system[0] == 4)
@@ -552,11 +599,11 @@ export default function Dashboard({ stats }: { stats: any }) {
                 
                 if(coordinate_system[0] == 9) {
                     displayCount = Math.min(8, forecastList.length);
-                    top_margin += "pt-4";
+                    top_margin += "pt-2";
                 }
                 else if(coordinate_system[0] == 6) {
                     displayCount = Math.min(20, forecastList.length);
-                    top_margin += "pt-4";
+                    top_margin += "pt-2";
                 }
                 else {
                     displayCount = Math.min(4, forecastList.length);
@@ -611,61 +658,61 @@ export default function Dashboard({ stats }: { stats: any }) {
 
 
         //dial
-        if (block === "current_production_capacity_visualization") {
-            const dials = stats?.dials || {};
-            const totalDial = dials?.total_dial?.[0];
-            const siteDials = dials?.site_dials || [];
+        // if (block === "current_production_capacity_visualization") {
+        //     const dials = stats?.dials || {};
+        //     const totalDial = dials?.total_dial?.[0];
+        //     const siteDials = dials?.site_dials || [];
 
-            if (totalDial) {
-                // Sizes for the block
-                const totalDialWidth = blockWidth * 0.7;
-                const totalDialHeight = blockHeight * 0.5;
+        //     if (totalDial) {
+        //         // Sizes for the block
+        //         const totalDialWidth = blockWidth * 0.7;
+        //         const totalDialHeight = blockHeight * 0.5;
 
-                const smallDialWidth = blockWidth * 0.3;
-                const smallDialHeight = blockHeight * 0.25;
+        //         const smallDialWidth = blockWidth * 0.3;
+        //         const smallDialHeight = blockHeight * 0.25;
 
-                blocks[block].block = (
-                <div className="flex flex-col items-center justify-center w-full h-auto space-y-2">
+        //         blocks[block].block = (
+        //         <div className="flex flex-col items-center justify-center w-full h-auto space-y-2">
                     
-                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Current Production Capacity</h2>
+        //             <h2 className='text-xs flex justify-left pl-4 pt-2'>Current Production Capacity</h2>
 
 
-                    <div className="flex items-center justify-center pt-0">
-                    <div className="flex flex-col items-center">
-                        <Dial
-                        percent={totalDial.capacity / 100}
-                        label={totalDial.label}
-                        boxWidth={totalDialWidth}
-                        boxHeight={totalDialHeight}
-                        />
-                    </div>
-                    </div>
+        //             <div className="flex items-center justify-center pt-0">
+        //             <div className="flex flex-col items-center">
+        //                 <Dial
+        //                 percent={totalDial.capacity / 100}
+        //                 label={totalDial.label}
+        //                 boxWidth={totalDialWidth}
+        //                 boxHeight={totalDialHeight}
+        //                 />
+        //             </div>
+        //             </div>
 
-                    {siteDials.length > 0 && (
-                    <div className="flex flex-row flex-wrap items-center justify-center gap-0 pt-0">
-                        {siteDials.map((dial: any, index: any) => (
-                        <div key={index} className="flex flex-col items-center">
-                            <Dial
-                            percent={dial.capacity / 100}
-                            boxWidth={smallDialWidth}
-                            boxHeight={smallDialHeight}
-                            />
-                            <p className="text-xs text-center mt-1">{dial.label}</p>
-                        </div>
-                        ))}
-                    </div>
-                    )}
-                </div>
-                );
-            } else {
-                // If no data
-                blocks[block].block = (
-                <div className="flex justify-center items-center h-full text-lg">
-                    No data available
-                </div>
-                );
-            }
-        }
+        //             {siteDials.length > 0 && (
+        //             <div className="flex flex-row flex-wrap items-center justify-center gap-0 pt-0">
+        //                 {siteDials.map((dial: any, index: any) => (
+        //                 <div key={index} className="flex flex-col items-center">
+        //                     <Dial
+        //                     percent={dial.capacity / 100}
+        //                     boxWidth={smallDialWidth}
+        //                     boxHeight={smallDialHeight}
+        //                     />
+        //                     <p className="text-xs text-center mt-1">{dial.label}</p>
+        //                 </div>
+        //                 ))}
+        //             </div>
+        //             )}
+        //         </div>
+        //         );
+        //     } else {
+        //         // If no data
+        //         blocks[block].block = (
+        //         <div className="flex justify-center items-center h-full text-lg">
+        //             No data available
+        //         </div>
+        //         );
+        //     }
+        // }
 
 
         //radar vis
@@ -686,88 +733,79 @@ export default function Dashboard({ stats }: { stats: any }) {
         }
 
         //current MWh output per project
-        if(block === "current_mwh") {
+        if (block === "current_mwh") {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
+            const siteStats = stats?.[currentProject];
 
-            let shrink_factor = 0.9;
-            if(coordinate_system[0] == 4) {
-                shrink_factor = 0.8;
-            }
+            const shrink_factor = coordinate_system[0] === 4 ? 0.8 : 0.9;
+            const dialWidth = blockWidth * shrink_factor;
+            const dialHeight = blockHeight * shrink_factor;
 
-            if(stats) {
+            if (siteStats) {
+                const mwhValue = siteStats["Energy Production (MWh)"];
+                const percent = siteStats["Capacity (%)"];
+                const dialPercent = Math.min(percent, 1); 
 
-                //set up data object
-                let data = [];
-                for(let i=0; i<stats.projects.length; i++) {
-
-                    //project name
-                    let proj_name = stats.projects[i];
-
-                    //production
-                    let production = stats[proj_name]["Energy Production (MWh)"];
-
-                    data.push( { name: proj_name, value: production*100 } )
-
-                } 
-
-                blocks[block].block = 
-
-                <div>
-                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Current MWh Production</h2>
-                    <PieChartGraph
-                        boxWidth={blockWidth}
-                        boxHeight={Math.round(blockHeight * shrink_factor)}
-                        data={ data }
-                        unit={"MWh"}
+                blocks[block].block = (
+                <div
+                    className="p-4 cursor-pointer flex flex-col items-center"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                >
+                    <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Current MWh Production: {currentProject}</h2>
+                    <Dial
+                    percent={dialPercent}
+                    label={`${mwhValue.toFixed(2)} MWh`}
+                    boxWidth={dialWidth}
+                    boxHeight={dialHeight}
                     />
                 </div>
-
+                );
             } else {
-                blocks[block].block = <div>Loading...</div>
+                blocks[block].block = (
+                <div className="p-4">Loading...</div>
+                );
             }
-            
         }
+
 
         //current MWh output per project
-        if(block === "current_carbon_avoided") {
+        if (block === "current_carbon_avoided") {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
+            const siteStats = stats?.[currentProject];
 
-            let shrink_factor = 0.9;
-            if(coordinate_system[0] == 4) {
-                shrink_factor = 0.8;
-            }
+            const shrink_factor = coordinate_system[0] === 4 ? 0.8 : 0.9;
+            const dialWidth = blockWidth * shrink_factor;
+            const dialHeight = blockHeight * shrink_factor;
 
-            if(stats) {
+            if (siteStats) {
+                const carbonValue = siteStats["Carbon Avoided (lbs)"];
+                const percent = siteStats["Capacity (%)"];
+                const dialPercent = Math.min(percent, 1); 
+            
 
-                //set up data object
-                let data = [];
-                for(let i=0; i<stats.projects.length; i++) {
-
-                    //project name
-                    let proj_name = stats.projects[i];
-
-                    //production
-                    let production = stats[proj_name]["Carbon Avoided (lbs)"];
-
-                    data.push( { name: proj_name, value: production*100 } )
-
-                } 
-
-                blocks[block].block = 
-
-                <div>
-                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Carbon Avoided (hour)</h2>
-                    <PieChartGraph
-                        boxWidth={blockWidth}
-                        boxHeight={Math.round(blockHeight * shrink_factor)}
-                        data={ data }
-                        unit={"lbs"}
+                blocks[block].block = (
+                <div
+                    className="p-4 cursor-pointer flex flex-col items-center"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                >
+                    <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Carbon Avoided (hour): {currentProject}</h2>
+                    <Dial
+                    percent={dialPercent}
+                    label={`${carbonValue.toFixed(2)} lbs/hour`}
+                    boxWidth={dialWidth}
+                    boxHeight={dialHeight}
                     />
                 </div>
-
+                );
             } else {
-                blocks[block].block = <div>Loading...</div>
+                blocks[block].block = (
+                <div className="p-4">Loading...</div>
+                );
             }
-            
         }
+
 
         
 
@@ -883,130 +921,153 @@ export default function Dashboard({ stats }: { stats: any }) {
         }
 
         if (block === "historic_mwh") {
-
             const historicalData = useMemo(() => {
-            if (stats) {
+                if (stats) {
                 return prepareHistoricalData(stats);
-            }
-            return [];
+                }
+                return [];
             }, [stats]);
 
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
+
             if (stats) {
-            blocks[block].block = 
-                <div>
-                <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic MWh Production</h2>
-                <MixedBarChart
-                    data={historicalData}
-                    projects={stats.projects}
-                    boxWidth={blockWidth}
-                    boxHeight={Math.round(blockHeight * 0.9)}
-                    unit={"MWh"}
-                />
+                blocks[block].block = 
+                <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                >
+                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic MWh Production: {currentProject}</h2>
+                    <MixedBarChart
+                        data={historicalData}
+                        projects={[currentProject]}
+                        boxWidth={blockWidth}
+                        boxHeight={Math.round(blockHeight * 0.9)}
+                        unit={"MWh"}
+                    />
                 </div>
             } else {
-            blocks[block].block = <div>Loading...</div>
+                blocks[block].block = <div>Loading...</div>
             }
-
         }
+
 
 
         if (block === "historic_carbon_avoided") {
-
             const historicalCO2Data = useMemo(() => {
-            if (stats) {
+                if (stats) {
                 return prepareHistoricalCO2Data(stats);
-            }
-            return [];
+                }
+                return [];
             }, [stats]);
 
-            if(stats) {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
 
+            if(stats) {
                 blocks[block].block = 
-                    <div>
-                        <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic Carbon Avoided</h2>
-                        <MixedBarChart
-                            data={historicalCO2Data}
-                            projects={stats.projects}
-                            boxWidth={blockWidth}
-                            boxHeight={Math.round(blockHeight * 0.9)}
-                            unit={"lbs"}
-                        />
-                    </div>
+                <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                >
+                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic Carbon Avoided: {currentProject}</h2>
+                    <MixedBarChart
+                        data={historicalCO2Data}
+                        projects={[currentProject]}
+                        boxWidth={blockWidth}
+                        boxHeight={Math.round(blockHeight)}
+                        unit={"lbs (1000s)"}
+                    />
+                </div>
             }
         }
 
-
+        
         if (block === "current_health") {
-            
-            if(stats) {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
 
-                const cost_string = String(stats.total["health"]);
+            if (stats) {
+                const cost_string = String(stats.historical?.total?.[currentProject]?.health ?? "0.00");
                 const cost_string_parsed = cost_string.split('.');
                 const dollar_string = cost_string_parsed[0];
                 const cent_string = cost_string_parsed[1];
-                const cost_to_display = dollar_string + "." + cent_string.substring(0,2);
+                const comma_dollar_string = String(Number(dollar_string).toLocaleString('en-US'));
+                
+                const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
 
-                if(blockHeight > 75) {
-
-                    blocks[block].block = (
-                        <div>
-                            <h2 className="text-xs font-bold mb-1 pt-2">$ of health cost saved</h2>
-                            <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
-                            <p className="text-xs text-gray-400">per WattTime</p>
-                        </div>
-                    );
+                if (blockHeight > 75) {
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs font-bold mb-1 pt-2">Saved Healthcare Costs</h2>
+                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
                 } else {
-
-                    
-
-                    blocks[block].block = (
-                        <div>
-                            <h2 className="text-xs mb-1 pt-1">Saved healthcare costs (hour)</h2>
-                            <p className="text-l font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
-                            <p className="text-xs text-gray-400">per WattTime</p>
-                        </div>
-                    );
-
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs mb-1 pt-1">Saved Healthcare Costs</h2>
+                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
                 }
+            } else {
+                blocks[block].block = (
+                <div className="p-4">Loading...</div>
+                );
             }
         }
 
+        if (block === "cumulative_production") {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
 
-        if (block === "recs") {
-            
-            if(stats) {
+            if (stats) {
+                const cost_string = String(stats.historical?.total?.[currentProject]?.mwh ?? "0.00");
+                const cost_string_parsed = cost_string.split('.');
+                const dollar_string = cost_string_parsed[0];
+                const cent_string = cost_string_parsed[1];
+                const comma_dollar_string = String(Number(dollar_string).toLocaleString('en-US'));
+                
+                const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
 
-                const recs_string = String(stats.total["RECs"]);
-                const recs_string_parsed = recs_string.split('.');
-                const whole_string = recs_string_parsed[0];
-                const decimal_string = recs_string_parsed[1];
-                const recs_to_display = whole_string + "." + decimal_string.substring(0,2);
-
-                if(blockHeight > 75) {
-
-                    blocks[block].block = (
-                        <div>
-                            <h2 className="text-xs font-bold mb-1 pt-2">Total RECs</h2>
-                            <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{recs_to_display}</p>
-                            <p className="text-xs text-gray-400">in Contract</p>
-                        </div>
-                    );
+                if (blockHeight > 75) {
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs font-bold mb-1 pt-2">Cumulative Production</h2>
+                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
                 } else {
-
-                    
-
-                    blocks[block].block = (
-                        <div>
-                            <h2 className="text-xs mb-1 pt-1">Number of RECs</h2>
-                            <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{recs_to_display}</p>
-                            <p className="text-xs text-gray-400">in Contract</p>
-                        </div>
-                    );
-
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs mb-1 pt-1">Cumulative Production</h2>
+                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
                 }
+            } else {
+                blocks[block].block = (
+                <div className="p-4">Loading...</div>
+                );
             }
         }
-
 
 
 

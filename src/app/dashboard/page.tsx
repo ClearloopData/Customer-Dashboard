@@ -20,6 +20,7 @@ import RadarMap from '@/components/RadarMap';
 import Block from '@/components/Block';
 import Dashboard from '@/components/Dashboard';
 import PieSlice from '@/components/PieSlice';
+import {project_name_to_region, project_name_to_firebase_name, project_name_to_max_mwh, project_name_to_lat_lon} from '@/components/projectData';
 
 
 
@@ -65,50 +66,7 @@ export default function DashboardPage() {
     */
 
 
-    //mapping project name (as in csv) to its watttime abreviated region (firebase db)
-    const project_name_to_region: Record<string, string> = {
-        "Arcadia South": "MISO_LOWER_MS_RIVER",
-        "Jackson II": "TVA",
-        "Panola I": "TVA",
-        "Panola II": "TVA",
-        "Panola III": "TVA",
-        "Paris BPU": "TVA",
-        "White Pine": "TVA"
-    };
-
-    //mapping project name (as in csv) to firebase slight renaming
-    const project_name_to_firebase_name: Record<string, string> = {
-        //"Arcadia South": "MISO_LOWER_MS_RIVER",
-        "Jackson II": "jackson",
-        "Panola I": "panola1",
-        "Panola II": "panola2",
-        "Panola III": "panola3",
-        "Paris BPU": "paris",
-        "White Pine": "whitepine"
-    };
-
-    //mapping project to max wattage (sourced from Clearloop website, not using appropriate formula or data source!)
-    const project_name_to_max_mwh: Record<string, number> = {
-        //"Arcadia South": "MISO_LOWER_MS_RIVER",
-        "Jackson II": 1,
-        "Panola I": 4.75,
-        "Panola II": 4.75,
-        "Panola III": 3.5,
-        "Paris BPU": 1,
-        "White Pine": 2.8
-    };
-
-    //mapping project to its lat and lon
-    const project_name_to_lat_lon: Record<string, any> = {
-
-        "Jackson II": { lat: 35.607757, lng: -88.917046, label: "Jackson II"},
-        "Panola I": { lat: 34.3041527, lng: -89.98631801, label: "Panola I"},
-        "Panola II": { lat: 34.34085632, lng: -89.91117261, label: "Panola II"},
-        "Panola III": { lat: 34.302365, lng: -89.987844, label: "Panola II"},
-        "Paris BPU": { lat: 36.4463, lng: -88.327083, label: "Paris BPU"},
-        "White Pine": { lat: 36.123581, lng: -83.284975, label: "White Pine"}
-
-    };
+    
 
     //customer company (this will always be known by the time of 
     // login in the future, although it won't be hard-coded like 
@@ -547,6 +505,7 @@ export default function DashboardPage() {
 
         //historic data
         to_ret["historical"] = {};
+        to_ret["historical"]["total"] = {};
         for(let project in historicalData) {
 
             to_ret["historical"][project] = {};
@@ -568,6 +527,8 @@ export default function DashboardPage() {
 
             //search data
             //year
+            let sum_mwh = 0;
+            let sum_carbon = 0;
             for(let year_string in historicalData[project]) {
 
                 const year_num = Number(year_string);
@@ -588,11 +549,18 @@ export default function DashboardPage() {
                             if(!to_ret["historical"][project][year_string]) {
                                 to_ret["historical"][project][year_string] = {};
                             } 
+
+                            let month_mwh = Number(historicalData[project][year_string][month_string].mwh) * percentage_of_project[project];
+                            let month_co2 = Number(historicalData[project][year_string][month_string].co2) * percentage_of_project[project];
+
                             to_ret["historical"][project][year_string][month_string] = 
                             {
-                                co2: Number(historicalData[project][year_string][month_string].co2) * percentage_of_project[project],
-                                mwh: Number(historicalData[project][year_string][month_string].mwh) * percentage_of_project[project],
+                                mwh: month_mwh,
+                                co2: month_co2,
                             }
+
+                            sum_mwh += month_mwh;
+                            sum_carbon += month_co2;
                             
                         } 
                         
@@ -600,6 +568,12 @@ export default function DashboardPage() {
                 }
 
             }
+
+            to_ret["historical"]["total"][project] = {
+                mwh: sum_mwh,
+                co2: sum_carbon,
+                health: sum_mwh*45
+            };
 
         }
         

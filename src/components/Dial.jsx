@@ -136,17 +136,17 @@ export default function Dial({ percent = 0.7, label = '', boxWidth = 300, boxHei
 
       <text
         x={cx}
-        y={cy + 20}
+        y={cy + 30}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize={Math.max(boxWidth * 0.08, 12)}
+        fontSize={Math.max(boxWidth * 0.06, 12)}
         fill="white"
         fontWeight="bold"
       >
-        {Math.round(Math.max(percent * 100, 0))}%
+        {label}
       </text>
 
-      <text
+      {/* <text
         x={cx}
         y={cy + 45}
         textAnchor="middle"
@@ -154,8 +154,8 @@ export default function Dial({ percent = 0.7, label = '', boxWidth = 300, boxHei
         fontSize={Math.max(boxWidth * 0.05, 10)}
         fill="white"
       >
-        {label}
-      </text>
+        
+      </text> */}
     </PieChart>
   );
 }
