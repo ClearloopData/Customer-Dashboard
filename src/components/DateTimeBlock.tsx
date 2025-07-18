@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 
-export default function DateTimeBlock({x_coor_system}: {number}) {
+type Props = {
+  x_coor_system: number;
+};
+
+export default function DateTimeBlock({ x_coor_system }: Props) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
