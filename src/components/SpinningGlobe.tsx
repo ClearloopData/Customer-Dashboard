@@ -1,21 +1,24 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import Globe from 'globe.gl';
-import * as THREE from 'three';
+import Globe, { GlobeInstance } from 'globe.gl';
 
-export default function SpinningGlobe({
-  points,
-  blockWidth,
-  blockHeight
-}: {
-  points: any;
+interface GlobePoint {
+  lat: number;
+  lng: number;
+  label: string;
+}
+
+interface Props {
+  points: GlobePoint[];
   blockWidth: number;
   blockHeight: number;
-}) {
+}
+
+export default function SpinningGlobe({ points, blockWidth, blockHeight }: Props) {
   const globeRef = useRef<HTMLDivElement>(null);
-  const globeInstanceRef = useRef<any>(null);
-  const intervalRef = useRef<any>(null);
+  const globeInstanceRef = useRef<GlobeInstance | null>(null);
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!globeRef.current) return;
@@ -28,7 +31,7 @@ export default function SpinningGlobe({
       }
     }
 
-    const globe = Globe()(globeRef.current)
+    const globe = new Globe(globeRef.current)
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
       .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
       .showAtmosphere(true)
@@ -40,17 +43,17 @@ export default function SpinningGlobe({
 
     globe
       .pointsData(points)
-      .pointLat(d => d.lat)
-      .pointLng(d => d.lng)
+      .pointLat((d: any) => d.lat)
+      .pointLng((d: any) => d.lng)
       .pointColor(() => 'white')
       .pointAltitude(() => 0.25)
-      .pointLabel(d => d.label)
+      .pointLabel((d: any) => d.label)
       .pointRadius(() => 0.7);
 
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.5;
 
-    function getSubsolarPoint(date = new Date()) {
+    function getSubsolarPoint(date = new Date()): { lat: number; lng: number } {
       const rad = Math.PI / 180;
       const dayOfYear = Math.floor(
         (date.getTime() - new Date(date.getUTCFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
@@ -60,11 +63,18 @@ export default function SpinningGlobe({
       return { lat: decl, lng };
     }
 
-    function getAntipode({ lat, lng }) {
-      return { lat: -lat, lng: ((lng + 180) % 360) - 180 };
+    function getAntipode(coord: { lat: number; lng: number }): { lat: number; lng: number } {
+      return {
+        lat: -coord.lat,
+        lng: ((coord.lng + 180) % 360) - 180,
+      };
     }
 
-    function destinationPoint({ lat, lng }, bearingDeg, distanceDeg) {
+    function destinationPoint(
+      { lat, lng }: { lat: number; lng: number },
+      bearingDeg: number,
+      distanceDeg: number
+    ): { lat: number; lng: number } {
       const rad = Math.PI / 180;
       const φ1 = lat * rad;
       const λ1 = lng * rad;
@@ -82,16 +92,24 @@ export default function SpinningGlobe({
           Math.cos(δ) - Math.sin(φ1) * Math.sin(φ2)
         );
 
-      return { lat: φ2 / rad, lng: ((λ2 / rad + 540) % 360) - 180 };
+      return {
+        lat: φ2 / rad,
+        lng: ((λ2 / rad + 540) % 360) - 180,
+      };
     }
 
-    function makeNightPolygon(center, radiusDeg = 90, numPoints = 100) {
-      const coords = [];
+    function makeNightPolygon(
+      center: { lat: number; lng: number },
+      radiusDeg = 90,
+      numPoints = 100
+    ): any {
+      const coords: [number, number][] = [];
       for (let i = 0; i <= numPoints; i++) {
         const bearing = (360 * i) / numPoints;
         const point = destinationPoint(center, bearing, radiusDeg);
         coords.push([point.lng, point.lat]);
       }
+
       return {
         type: 'Feature',
         geometry: {
@@ -103,19 +121,19 @@ export default function SpinningGlobe({
     }
 
     function updateNight() {
-      const sun = getSubsolarPoint(new Date());
+      const sun = getSubsolarPoint();
       const nightCenter = getAntipode(sun);
       const nightPolygon = makeNightPolygon(nightCenter);
-      globe.polygonsData([nightPolygon])
+      globe
+        .polygonsData([nightPolygon])
         .polygonCapColor(() => 'rgba(0,0,0,0.8)')
         .polygonSideColor(() => 'rgba(0,0,0,0)')
         .polygonStrokeColor(() => 'rgba(0,0,0,0)');
     }
 
     updateNight();
-    intervalRef.current = setInterval(updateNight, 60 * 1000);
+    intervalRef.current = window.setInterval(updateNight, 60 * 1000);
 
-    // Save globe instance for cleanup
     globeInstanceRef.current = globe;
 
     return () => {

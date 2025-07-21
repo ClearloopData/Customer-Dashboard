@@ -81,7 +81,7 @@ export default function RadarMap({
         )}
 
         {/* Multiple Markers with Popup Labels */}
-        {coors.map((coor, idx) => (
+        {coors.map((coor: any, idx: any) => (
           <Marker
             key={idx}
             position={[coor.lat, coor.lng]}
