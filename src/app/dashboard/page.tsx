@@ -17,7 +17,6 @@ import Image from 'next/image';
 import { signInToSharedDB } from '@/lib/firebase';
 import { getWeatherAtCoords, getForecastAtCoords } from '@/lib/weather';
 import RadarMap from '@/components/RadarMap';
-import Block from '@/components/Block';
 import Dashboard from '@/components/Dashboard';
 import PieSlice from '@/components/PieSlice';
 import {project_name_to_region, project_name_to_firebase_name, project_name_to_max_mwh, project_name_to_lat_lon} from '@/components/projectData';
@@ -31,12 +30,8 @@ export default function DashboardPage() {
       signInToSharedDB();
     }, []);
 
-
-
     /*
-
     STATE VARIABLES
-
     */
 
     //gets current user (the app keeps track of this for you)
@@ -60,13 +55,8 @@ export default function DashboardPage() {
 
 
     /*
-
-    OTHER DATA STRUCTURES
-
+    DATA STRUCTURES
     */
-
-
-    
 
     //customer company (this will always be known by the time of 
     // login in the future, although it won't be hard-coded like 
@@ -81,11 +71,8 @@ export default function DashboardPage() {
         // add other fields as needed if you want
     }
 
-
     /*
-
     EFFECT HOOKS
-
     */
 
     //React hook to fetch data from csv file

@@ -1,5 +1,4 @@
 // components/Dashboard.tsx
-import Block from '@/components/Block';
 import useWindowSize from '@/app/dashboard/useWindowSize';
 import React from 'react';
 import { useEffect, useState, useMemo } from 'react';
