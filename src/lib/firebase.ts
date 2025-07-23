@@ -4,6 +4,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase } from 'firebase/database';
+import { signInWithCustomToken } from "firebase/auth";
 
 // Auth Project config (used for login)
 const authConfig = {
@@ -38,19 +39,19 @@ export const dbAuth = getAuth(dbApp);
 export const database = getDatabase(dbApp);
 
 // Shared DB login (called after login to authApp)
+
 export const signInToSharedDB = async () => {
   try {
     const res = await fetch('/api/sign-in-db');
-    const data = await res.json();
+    const { email, password } = await res.json();
 
-    if (res.ok && data.token) {
-      // Optionally use the token to authorize with another SDK
-      console.log("Successfully signed into shared DB with secure token");
-    } else {
-      console.error("Shared DB login failed:", data.error);
-    }
+    if (!email || !password) throw new Error("Missing credentials");
+
+    await signInWithEmailAndPassword(dbAuth, email, password);
+
+    console.log("Client signed in to shared DB with email/password");
   } catch (err) {
-    console.error("Client error during shared DB login", err);
+    console.error("signInToSharedDB failed:", err);
   }
 };
 
