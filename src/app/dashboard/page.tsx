@@ -33,7 +33,7 @@ export default function DashboardPage() {
     useEffect(() => {
         async function loginAndSetReady() {
             await signInToSharedDB();
-            //setDbReady(true);
+            setDbReady(true);
         }
 
         loginAndSetReady();
@@ -63,7 +63,11 @@ export default function DashboardPage() {
     //weather data
     const [weatherData, setWeatherData] = useState<any>(null);
     //track if we're logged into shared user BEFORE attempting to get data from firebase
-    //const [dbReady, setDbReady] = useState(false);
+    const [dbReady, setDbReady] = useState(false);
+    
+    // TODO: comment if this works
+    const [relevantProjects, setRelevantProjects] = useState<Array<string>>([]);
+    const [relevantRegions, setRelevantRegions] = useState<Array<string>>([]);
 
 
 
@@ -75,13 +79,14 @@ export default function DashboardPage() {
     // login in the future, although it won't be hard-coded like 
     // this obviously)
     const customer_company = "Rivian"
-    let relevant_projects: Array<string> = [];
-    let relevant_regions: Array<string> = [];
+
+
     
 
     interface CSVRow {
         "Clearloop Partner": string;
-        // add other fields as needed if you want
+        "Project Name": string;
+        [key: string]: any;
     }
 
     /*
@@ -92,53 +97,46 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchCSV = async () => {
             const response = await fetch('/data/CombinedProjectData.csv');
-            const text = await response.text(); //csv as a string
+            const text = await response.text(); // CSV as a string
 
-            const parsed = Papa.parse<CSVRow>(text, { header: true }); //csv as an array of objects
+            const parsed = Papa.parse<CSVRow>(text, { header: true }); // CSV as an array of objects
 
-            //filtered data for only customer company in csv
             const filtered_customer_company_data: Array<any> = [];
+            const newProjects: string[] = [];
+            const newRegions: string[] = [];
 
-            //loop through each row in the csv file...
-            for(let row in parsed.data) {
+            // Loop through each row in the CSV file...
+            for (let row of parsed.data) {
+                if (row["Clearloop Partner"] === customer_company) {
+                    filtered_customer_company_data.push(row);
 
-                //...and if the data is for the customer company we want to look at...
-                if(parsed.data[row]["Clearloop Partner"] === customer_company) {
-
-                    //...then save the row of data to look at later
-                    filtered_customer_company_data.push(parsed.data[row]);
-
-                    //get the current index for the operations below
-                    const current_ind = filtered_customer_company_data.length - 1;
-
-                    const project_name = filtered_customer_company_data[current_ind]["Project Name"];
+                    const project_name = row["Project Name"];
                     const region = project_name_to_region[project_name];
+                    row["Region"] = region;
 
-                    filtered_customer_company_data[current_ind]["Region"] = region;
-
-                    if(!relevant_projects.includes(project_name)){
-                        relevant_projects.push(project_name);
+                    if (!newProjects.includes(project_name)) {
+                        newProjects.push(project_name);
                     }
-
-                    if(!relevant_regions.includes(region)){
-                        relevant_regions.push(region);
+                    if (!newRegions.includes(region)) {
+                        newRegions.push(region);
                     }
-
                 }
-
             }
 
             setCsvData(filtered_customer_company_data);
+            setRelevantProjects(newProjects);
+            setRelevantRegions(newRegions);
             setWeatherReady(true);
         };
 
         fetchCSV();
-
     }, []);
+
 
 
     //React hook to fetch moer data from Firebase
     useEffect(() => {
+        if(!dbReady) return;
 
         const fetchMoer = async () => {
             const dataRef = ref(database, 'moer'); // getting moer data
@@ -155,9 +153,9 @@ export default function DashboardPage() {
                 const filtered_moer_data: Record<string, any> = {};
 
                 //filter for only regions that customer company has sites in
-                for(let region_num in relevant_regions) {
+                for(let region_num in relevantRegions) {
 
-                    const region = relevant_regions[region_num]
+                    const region = relevantRegions[region_num]
  
                     if(original_moer_data[region]) {
                         filtered_moer_data[region] = original_moer_data[region]
@@ -170,10 +168,11 @@ export default function DashboardPage() {
             }
         };
         fetchMoer();
-    }, []);
+    }, [dbReady]);
 
-    //React hook to fetch moer data from Firebase
+    //React hook to fetch health data from Firebase
     useEffect(() => {
+        if(!dbReady) return;
 
         const fetchHealth = async () => {
             const dataRef = ref(database, 'health'); // getting moer data
@@ -190,9 +189,9 @@ export default function DashboardPage() {
                 const filtered_health_data: Record<string, any> = {};
 
                 //filter for only regions that customer company has sites in
-                for(let region_num in relevant_regions) {
+                for(let region_num in relevantRegions) {
 
-                    const region = relevant_regions[region_num]
+                    const region = relevantRegions[region_num]
  
                     if(original_health_data[region]) {
                         filtered_health_data[region] = original_health_data[region]
@@ -205,10 +204,11 @@ export default function DashboardPage() {
             }
         };
         fetchHealth();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch realtime data from Firebase
     useEffect(() => {
+        if(!dbReady) return;
 
         const fetchRealtime = async () => {
             const dataRef = ref(database, 'realtime'); // getting realtime data
@@ -227,9 +227,9 @@ export default function DashboardPage() {
                 //Location
                 const location_data = original_realtime_data["Location"];
                 const filtered_location_data: Record<string, any> = {};
-                for(let project_num in relevant_projects) {
+                for(let project_num in relevantProjects) {
 
-                    const project = relevant_projects[project_num];
+                    const project = relevantProjects[project_num];
                     const renamed_project = project_name_to_firebase_name[project];
                     filtered_location_data[project] = location_data[renamed_project];
                 }
@@ -238,9 +238,9 @@ export default function DashboardPage() {
                 //lastSixHours
                 const lastSixHours_data = original_realtime_data["lastSixHours"]
                 const filtered_lastSixHours_data: Record<string, any> = {};
-                for(let project_num in relevant_projects) {
+                for(let project_num in relevantProjects) {
 
-                    const project = relevant_projects[project_num];
+                    const project = relevantProjects[project_num];
                     const renamed_project = project_name_to_firebase_name[project];
                     filtered_lastSixHours_data[project] = lastSixHours_data[renamed_project];
     
@@ -250,9 +250,9 @@ export default function DashboardPage() {
                 //lastHour
                 const lastHour_data = original_realtime_data["lastHour"];
                 const filtered_lastHour_data: Record<string, any> = {};
-                for(let project_num in relevant_projects) {
+                for(let project_num in relevantProjects) {
 
-                    const project = relevant_projects[project_num];
+                    const project = relevantProjects[project_num];
                     const renamed_project = project_name_to_firebase_name[project];
                     filtered_lastHour_data[project] = lastHour_data[renamed_project];
 
@@ -268,10 +268,11 @@ export default function DashboardPage() {
             }
         };
         fetchRealtime();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch historical data from Firebase
     useEffect(() => {
+        if(!dbReady) return;
 
         const fetchHistorical = async () => {
             const dataRef = ref(database, 'historical'); // getting realtime data
@@ -289,9 +290,9 @@ export default function DashboardPage() {
 
                 //Location
                 const filtered_location_data: Record<string, any> = {};
-                for(let project_num in relevant_projects) {
+                for(let project_num in relevantProjects) {
 
-                    const project = relevant_projects[project_num];
+                    const project = relevantProjects[project_num];
                     const renamed_project = project_name_to_firebase_name[project];
                     filtered_location_data[project] = original_historical_data[renamed_project];
                 }
@@ -305,7 +306,7 @@ export default function DashboardPage() {
             }
         };
         fetchHistorical();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch weather data
     useEffect(() => {
@@ -366,9 +367,7 @@ export default function DashboardPage() {
     //Makes React wait to call calculateStats until all three datasets are available
     useEffect(() => {
 
-        
-
-        if (csvData && moerData && healthData && realtimeData && historicalData && weatherData) {
+        if (csvData != undefined && moerData != undefined && healthData != undefined && realtimeData != undefined && historicalData != undefined && weatherData != undefined) {
             const ret = calculateStats(csvData, moerData, healthData, realtimeData, historicalData, weatherData);
             setStats(ret);
         }
@@ -443,6 +442,9 @@ export default function DashboardPage() {
 
             //add coordinates
             to_ret["coors"].push(project_name_to_lat_lon[project]);
+
+            console.log("CURRENT STATE", realtimeData["lastHour"][project])
+            console.log("TEST")
 
             const production = Number(realtimeData["lastHour"][project]["mwh"]);
 
