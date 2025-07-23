@@ -40,16 +40,19 @@ export const database = getDatabase(dbApp);
 // Shared DB login (called after login to authApp)
 export const signInToSharedDB = async () => {
   try {
-    await signInWithEmailAndPassword(
-      dbAuth,
-      String(process.env.NEXT_PUBLIC_SHARED_ACCESS_EMAIL),
-      String(process.env.NEXT_PUBLIC_SHARED_ACCESS_PASSWORD)
-    );
-    console.log("Signed in to DB as shared-access@carbonapp.com");
-  } catch (error) {
-    console.error("Failed to sign in to DB as shared user:", error);
-    console.log("TRIED", String(process.env.SHARED_ACCESS_EMAIL), " AND ", String(process.env.SHARED_ACCESS_PW))
+    const res = await fetch('/api/sign-in-db');
+    const data = await res.json();
+
+    if (res.ok && data.token) {
+      // Optionally use the token to authorize with another SDK
+      console.log("Successfully signed into shared DB with secure token");
+    } else {
+      console.error("Shared DB login failed:", data.error);
+    }
+  } catch (err) {
+    console.error("Client error during shared DB login", err);
   }
 };
+
 
 export default authApp;
