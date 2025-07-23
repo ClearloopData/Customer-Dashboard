@@ -1,4 +1,5 @@
 // src/lib/firebase.ts
+//comment for commit
 
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
