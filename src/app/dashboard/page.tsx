@@ -30,6 +30,16 @@ export default function DashboardPage() {
       signInToSharedDB();
     }, []);
 
+    useEffect(() => {
+        async function loginAndSetReady() {
+            await signInToSharedDB();
+            setDbReady(true);
+        }
+
+        loginAndSetReady();
+    }, []);
+
+
     /*
     STATE VARIABLES
     */
@@ -52,6 +62,9 @@ export default function DashboardPage() {
     const [weatherReady, setWeatherReady] = useState<boolean>(false);
     //weather data
     const [weatherData, setWeatherData] = useState<any>(null);
+    //track if we're logged into shared user BEFORE attempting to get data from firebase
+    const [dbReady, setDbReady] = useState(false);
+
 
 
     /*
@@ -157,10 +170,11 @@ export default function DashboardPage() {
             }
         };
         fetchMoer();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch moer data from Firebase
     useEffect(() => {
+        if (!dbReady) return;
 
         const fetchHealth = async () => {
             const dataRef = ref(database, 'health'); // getting moer data
@@ -196,6 +210,7 @@ export default function DashboardPage() {
 
     //React hook to fetch realtime data from Firebase
     useEffect(() => {
+        if (!dbReady) return;
 
         const fetchRealtime = async () => {
             const dataRef = ref(database, 'realtime'); // getting realtime data
@@ -255,10 +270,11 @@ export default function DashboardPage() {
             }
         };
         fetchRealtime();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch historical data from Firebase
     useEffect(() => {
+        if (!dbReady) return;
 
         const fetchHistorical = async () => {
             const dataRef = ref(database, 'historical'); // getting realtime data
@@ -292,7 +308,7 @@ export default function DashboardPage() {
             }
         };
         fetchHistorical();
-    }, []);
+    }, [dbReady]);
 
     //React hook to fetch weather data
     useEffect(() => {
@@ -352,8 +368,6 @@ export default function DashboardPage() {
 
     //Makes React wait to call calculateStats until all three datasets are available
     useEffect(() => {
-
-        
 
         if (csvData && moerData && realtimeData && historicalData && weatherData) {
             const ret = calculateStats(csvData, moerData, healthData, realtimeData, historicalData, weatherData);
