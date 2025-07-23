@@ -139,6 +139,7 @@ export default function DashboardPage() {
 
     //React hook to fetch moer data from Firebase
     useEffect(() => {
+        if (!dbReady) return;
 
         const fetchMoer = async () => {
             const dataRef = ref(database, 'moer'); // getting moer data
