@@ -68,7 +68,7 @@ export default function AuthPage() {
                 />
                 <input
                     type="password"
-                    placeholder="Password (min 6 chars)"
+                    placeholder="Password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className="w-full border px-3 py-2 rounded"
