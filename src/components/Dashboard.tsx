@@ -108,7 +108,14 @@ const blocks:any = {
             <h2 className='text-sm'>#RECS</h2>
             </div>,
         coor: { 9: [0, 0], 6: [0, 0], 4: [0, 0] },
-        width: { 9: 2, 6: 2, 4: 2 },
+        width: { 9: 1, 6: 1, 4: 1 },
+        height: { 9: 1, 6: 1, 4: 1 },
+    },
+
+    recs: {
+        block: <div><p>recs</p></div>,
+        coor: { 9: [1, 0], 6: [1, 0], 4: [1, 0] },
+        width: { 9: 1, 6: 1, 4: 1 },
         height: { 9: 1, 6: 1, 4: 1 },
     },
     date_and_time: {
@@ -119,55 +126,34 @@ const blocks:any = {
     },
     weather_summary_current: {
         block: <div><h2>Weather Summary (current)</h2></div>,
-        coor: { 9: [4, 0], 6: [4, 0], 4: [0, 1] },
+        coor: { 9: [4, 0], 6: [4, 0], 4: [0, 7] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 1, 6: 1, 4: 1 },
     },
     weather_summary_future: {
         block: <div><h2>Weather Summary (future)</h2></div>,
-        coor: { 9: [6, 0], 6: [0, 10], 4: [2, 1] },
-        width: { 9: 3, 6: 6, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-
-    step1: {
-        block: <div><h2>step 1</h2></div>,
-        coor: { 9: [6, 1], 6: [0, 11], 4: [0, 17] },
-        width: { 9: 3, 6: 6, 4: 4 },
+        coor: { 9: [4, 1], 6: [4, 1], 4: [0, 9] },
+        width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 2, 6: 2, 4: 2 },
     },
 
-    step2: {
-        block: <div><h2>step 2</h2></div>,
-        coor: { 9: [6, 3], 6: [0, 13], 4: [0, 19] },
-        width: { 9: 3, 6: 6, 4: 4 },
-        height: { 9: 2, 6: 2, 4: 2 },
-    },
-
-    step3: {
-        block: <div><h2>step 3</h2></div>,
-        coor: { 9: [6, 5], 6: [0, 15], 4: [0, 21] },
-        width: { 9: 3, 6: 6, 4: 4 },
-        height: { 9: 2, 6: 2, 4: 2 },
-    },
-
-    step4: {
-        block: <div><h2>step 4</h2></div>,
-        coor: { 9: [6, 7], 6: [0, 17], 4: [0, 23] },
-        width: { 9: 3, 6: 6, 4: 4 },
+    community_partnerships: {
+        block: <div><h2>Community partnerships (TODO)</h2></div>,
+        coor: { 9: [6, 0], 6: [3, 12], 4: [0, 23] },
+        width: { 9: 3, 6: 3, 4: 4 },
         height: { 9: 3, 6: 2, 4: 2 },
     },
 
-    // current_production_capacity_visualization: {
-    //     block: <div><p>c.p.c.v</p></div>,
-    //     coor: { 9: [0, 1], 6: [0, 1], 4: [0, 2] },
-    //     width: { 9: 2, 6: 2, 4: 2 },
-    //     height: { 9: 3, 6: 3, 4: 3 },
-    // },
+    steps: {
+        block: <div><h2>step 1</h2></div>,
+        coor: { 9: [6, 3], 6: [3, 10], 4: [0, 21] },
+        width: { 9: 3, 6: 3, 4: 4 },
+        height: { 9: 3, 6: 2, 4: 2 },
+    },
 
     sunrise_sunset_on_spinning_globe: {
         block: <div></div>,
-        coor: { 9: [2, 1], 6: [2, 1], 4: [2, 8] },
+        coor: { 9: [2, 1], 6: [2, 1], 4: [2, 1] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
@@ -176,72 +162,82 @@ const blocks:any = {
         block: <div>
 
         </div>,
-        coor: { 9: [4, 1], 6: [4, 1], 4: [2, 2] },
+        coor: { 9: [4, 3], 6: [4, 3], 4: [2, 7] },
         width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 3 },
+        height: { 9: 3, 6: 3, 4: 4 },
     },
 
     current_mwh: {
         block: <div><p>current MWh output per project</p></div>,
-        coor: { 9: [0, 1], 6: [0, 1], 4: [0, 2] },
+        coor: { 9: [0, 1], 6: [0, 1], 4: [0, 1] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
 
     current_carbon_avoided: {
         block: <div><p>current carbon avoided</p></div>,
-        coor: { 9: [0, 4], 6: [0, 4], 4: [0, 5] },
+        coor: { 9: [0, 4], 6: [0, 4], 4: [0, 4] },
         width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
 
+    cumulative_production: {
+        block: <div><p>cumulative_production</p></div>,
+        coor: { 9: [2, 4], 6: [2, 4], 4: [2, 4] },
+        width: { 9: 2, 6: 2, 4: 2 },
+        height: { 9: 1, 6: 1, 4: 1 },
+    },
+
+    cumulative_health: {
+        block: <div><p>current health</p></div>,
+        coor: { 9: [2, 5], 6: [2, 5], 4: [2, 5] },
+        width: { 9: 2, 6: 2, 4: 2 },
+        height: { 9: 1, 6: 1, 4: 1 },
+    },
+
+    cumulative_carbon_avoided: {
+        block: <div><p>carbon avoided</p></div>,
+        coor: { 9: [2, 6], 6: [2, 6], 4: [2, 6] },
+        width: { 9: 2, 6: 2, 4: 2 },
+        height: { 9: 1, 6: 1, 4: 1 },
+    },
+
     visibility: {
         block: <div><p>visibility</p></div>,
-        coor: { 9: [4, 4], 6: [4, 4], 4: [0, 8] },
+        coor: { 9: [4, 6], 6: [4, 6], 4: [0, 8] },
         width: { 9: 1, 6: 1, 4: 1 },
         height: { 9: 1, 6: 1, 4: 1 },
     },
 
     humidity: {
         block: <div><p>humidity</p></div>,
-        coor: { 9: [5, 4], 6: [5, 4], 4: [1, 8] },
+        coor: { 9: [5, 6], 6: [5, 6], 4: [1, 8] },
         width: { 9: 1, 6: 1, 4: 1 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-
-    current_health: {
-        block: <div><p>current health</p></div>,
-        coor: { 9: [4, 5], 6: [4, 5], 4: [0, 9] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-
-    cumulative_production: {
-        block: <div><p>cumulative_production</p></div>,
-        coor: { 9: [4, 6], 6: [4, 6], 4: [0, 10] },
-        width: { 9: 2, 6: 2, 4: 2 },
         height: { 9: 1, 6: 1, 4: 1 },
     },
 
     historic_mwh: {
         block: <div><p>historic MHw (month), all time</p></div>,
         coor: { 9: [0, 7], 6: [0, 7], 4: [0, 11] },
-        width: { 9: 2, 6: 2, 4: 2 },
+        width: { 9: 3, 6: 3, 4: 4 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
 
     historic_carbon_avoided: {
         block: <div><p>historic carbon avoided (month), all time</p></div>,
-        coor: { 9: [2, 7], 6: [2, 7], 4: [2, 11] },
-        width: { 9: 2, 6: 2, 4: 2 },
+        coor: { 9: [3, 7], 6: [3, 7], 4: [0, 14] },
+        width: { 9: 3, 6: 3, 4: 4 },
         height: { 9: 3, 6: 3, 4: 3 },
     },
 
-    empty: {
-        block: <div><p>empty box</p></div>,
-        coor: { 9: [4, 7], 6: [4, 7], 4: [0, 14] },
-        width: { 9: 2, 6: 2, 4: 4 },
-        height: { 9: 3, 6: 3, 4: 3 },
+    solar_panel_layout: {
+        block: 
+        <div>
+            <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Project Layout</h2>
+        </div>,
+        coor: { 9: [6, 6], 6: [0, 10], 4: [0, 17] },
+        width: { 9: 3, 6: 3, 4: 4 },
+        height: { 9: 4, 6: 4, 4: 4 },
     },
 }
 
@@ -421,6 +417,7 @@ export default function Dashboard({ stats }: { stats: any }) {
     //states
     const [weatherProjectIndex, setWeatherProjectIndex] = useState(0);
     const [selectedSiteIndex, setSelectedSiteIndex] = useState(0);
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
 
 
@@ -456,19 +453,35 @@ export default function Dashboard({ stats }: { stats: any }) {
         
 
 
-        if(block === "logo") {
-
-            if(stats) {
-                blocks[block].block = 
-                <div className='h-full'>
-                    <div className="flex justify-center items-center space-x-1">
-                            <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />X
-                            <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+        if (block === "logo") {
+            if (stats) {
+                blocks[block].block = (
+                <div>
+                    <div className="h-full w-full flex flex-col items-center justify-center">
+                        <div className="flex items-center justify-center space-x-1">
+                        <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />
+                        <span className="text-lg">X</span>
+                        <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+                        </div>
                     </div>
-                    <h2 className='text-xs mt-2' style={{ color: "#F7E15D" }}>RECs: {stats.total.RECs.toLocaleString('en-US')}</h2>
                 </div>
+                );
             }
+        }
 
+        if(block === "recs") {
+
+            if(stats)
+    
+
+                blocks[block].block = (
+                    <div>
+                        <div className="h-full w-full flex flex-col items-center justify-center">
+                            <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
+                            <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+                        </div>
+                    </div>
+                );
         }
 
 
@@ -591,127 +604,51 @@ export default function Dashboard({ stats }: { stats: any }) {
             const forecastList = forecastData[currentProject] || [];
 
             if (forecastList.length > 0) {
-                // Show the first few forecasts
-
-                let displayCount = 0;
-                let top_margin = "flex space-x-5 pl-4 "
-                
-                if(coordinate_system[0] == 9) {
-                    displayCount = Math.min(8, forecastList.length);
-                    top_margin += "pt-2";
-                }
-                else if(coordinate_system[0] == 6) {
-                    displayCount = Math.min(20, forecastList.length);
-                    top_margin += "pt-2";
-                }
-                else {
-                    displayCount = Math.min(4, forecastList.length);
-                    top_margin += "pt-0";
-                }
-                    
-
-
-
-                console.log(displayCount, "DISPLAY COUNT")
+                const displayCount = Math.min(8, forecastList.length);
                 const slicedForecast = forecastList.slice(0, displayCount);
 
                 blocks[block].block = (
+                <div>
                     <div
-                        className="p-4 cursor-pointer flex flex-col"
+                        className="h-full w-full p-4 cursor-pointer flex items-center justify-center"
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                        <div className={top_margin}>
-                            {slicedForecast.map((forecast: any, index: any) => {
-                                const icon = weather_id_mappings[forecast.id]?.icon || "01d.png";
-                                const desc = weather_id_mappings[forecast.id]?.desc || "Clear";
-                                return (
-                                    <div key={index} className="flex flex-col items-center">
-                                        <img
-                                            src={"/" + icon}
-                                            width={28}
-                                            className="inline-block mb-0"
-                                            alt={desc}
-                                        />
-                                        <p className="text-sm font-bold">{Math.round(forecast.temperature)}°F</p>
-                                        <p className="text-[10px] text-gray-400 text-center">
-                                            {calculateForecastHourLabel(forecast.dt)}
-                                        </p>
-                                    </div>
-                                )
-                            })}
+                        <div className="grid grid-cols-4 gap-x-6 gap-y-2">
+                        {slicedForecast.map((forecast: any, index: number) => {
+                            const icon = weather_id_mappings[forecast.id]?.icon || "01d.png";
+                            const desc = weather_id_mappings[forecast.id]?.desc || "Clear";
+
+                            return (
+                            <div key={index} className="flex flex-col items-center">
+                                <img
+                                src={"/" + icon}
+                                width={28}
+                                className="inline-block mb-0"
+                                alt={desc}
+                                />
+                                <p className="text-sm font-bold">{Math.round(forecast.temperature)}°F</p>
+                                <p className="text-[10px] text-gray-400 text-center">
+                                {calculateForecastHourLabel(forecast.dt)}
+                                </p>
+                            </div>
+                            );
+                        })}
                         </div>
-                        {/* <p className="text-xs text-gray-400 pt-2">{currentProject}</p> */}
                     </div>
+                </div>
                 );
             } else {
                 blocks[block].block = (
-                    <div
-                        className="p-4 cursor-pointer"
-                        onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
-                    >
-                        Loading forecast...
-                    </div>
+                <div
+                    className="p-4 cursor-pointer flex items-center justify-center h-full"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                >
+                    Loading forecast...
+                </div>
                 );
             }
         }
 
-
-        //dial
-        // if (block === "current_production_capacity_visualization") {
-        //     const dials = stats?.dials || {};
-        //     const totalDial = dials?.total_dial?.[0];
-        //     const siteDials = dials?.site_dials || [];
-
-        //     if (totalDial) {
-        //         // Sizes for the block
-        //         const totalDialWidth = blockWidth * 0.7;
-        //         const totalDialHeight = blockHeight * 0.5;
-
-        //         const smallDialWidth = blockWidth * 0.3;
-        //         const smallDialHeight = blockHeight * 0.25;
-
-        //         blocks[block].block = (
-        //         <div className="flex flex-col items-center justify-center w-full h-auto space-y-2">
-                    
-        //             <h2 className='text-xs flex justify-left pl-4 pt-2'>Current Production Capacity</h2>
-
-
-        //             <div className="flex items-center justify-center pt-0">
-        //             <div className="flex flex-col items-center">
-        //                 <Dial
-        //                 percent={totalDial.capacity / 100}
-        //                 label={totalDial.label}
-        //                 boxWidth={totalDialWidth}
-        //                 boxHeight={totalDialHeight}
-        //                 />
-        //             </div>
-        //             </div>
-
-        //             {siteDials.length > 0 && (
-        //             <div className="flex flex-row flex-wrap items-center justify-center gap-0 pt-0">
-        //                 {siteDials.map((dial: any, index: any) => (
-        //                 <div key={index} className="flex flex-col items-center">
-        //                     <Dial
-        //                     percent={dial.capacity / 100}
-        //                     boxWidth={smallDialWidth}
-        //                     boxHeight={smallDialHeight}
-        //                     />
-        //                     <p className="text-xs text-center mt-1">{dial.label}</p>
-        //                 </div>
-        //                 ))}
-        //             </div>
-        //             )}
-        //         </div>
-        //         );
-        //     } else {
-        //         // If no data
-        //         blocks[block].block = (
-        //         <div className="flex justify-center items-center h-full text-lg">
-        //             No data available
-        //         </div>
-        //         );
-        //     }
-        // }
 
 
         //radar vis
@@ -724,7 +661,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                     <RadarMapWrapper
                     lat={35.5}
                     lon={-89.5}
-                    zoom={6}
+                    zoom={4}
                     coors={stats.coors}
                     />
                 </div>
@@ -805,49 +742,104 @@ export default function Dashboard({ stats }: { stats: any }) {
             }
         }
 
+        const step_font_size = unit_height < 75 ? 1 : 1.25;
+        if (block === "steps") {
+        const steps = [
+            {
+            title: "Step 1: Solar Farm Energy Production",
+            content: `Depending on the time of day, weather, and many other factors, the solar farm production is gathered and reported. ${
+                stats ? stats.total.name : "<company>"
+            }'s portion of Clearloop projects is currently producing ${
+                stats ? String(stats.total["Energy Production (MWh)"]).substring(0, 5) : 0
+            } megawatts per hour.`,
+            },
+            {
+            title: "Step 2: Marginal Emissions",
+            content: `Using data from WattTime, Clearloop calculates the marginal emissions. Marginal emissions are the rate at which emissions would change with a small change to electricity load (like turning on a light switch). The marginal emissions rate is currently ${
+                stats ? stats.total["moer"] : 0
+            } lbs of carbon offset/MWh.`,
+            },
+            {
+            title: "Step 3: Carbon Offset",
+            content: `The CO2 emissions offset by the solar farm are calculated by multiplying together the marginal emissions rate and the energy production. For a more accurate estimate, the marginal emissions data is acquired every 5 minutes. The carbon reclaimed from ${
+                stats ? stats.total.name : "<company>"
+            }'s portion of Clearloop production this hour is approximately ${
+                stats ? String(stats.total["Carbon Avoided (lbs)"]).substring(0, 6) : 0
+            } lbs per hour.`,
+            },
+            {
+            title: "Step 4: Health Benefits Provided",
+            content: `Seven million people per year die from air pollution. Fossil-fueled power plants emit pollutants that damage health like sulfur dioxide. These pollutants cause people living close to power plants to experience higher rates of health problems, such as asthma, heart disease, strokes, and premature death. ${
+                stats ? stats.total.name : "<company>"
+            } has prevented approximately $${stats ? formatDecimal(String(stats.total["health"])) : "0.00"} of damage to human health during the last hour.`,
+            },
+        ];
+
+        const currentStep = steps[currentStepIndex];
+
+        blocks[block].block = (
+            <div
+            className="p-4 cursor-pointer"
+            onClick={() => setCurrentStepIndex((prev) => (prev + 1) % steps.length)}
+            >
+            <h2
+                className="flex text-xl font-bold justify-left pl-4 pt-4"
+                style={{ color: "#F7E15D" }}
+            >
+                {currentStep.title}
+            </h2>
+            <p
+                className="flex text-left pl-4 pt-2 text-sm"
+                style={{ fontSize: `${step_font_size}rem` }}
+            >
+                {currentStep.content}
+            </p>
+            </div>
+        );
+        }
 
         
 
         //steps
-        const step_font_size = unit_height < 75 ? 0.70 : 0.85;
-        if(block === "step1") {
-            blocks[block].block = <div>
-                <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 1: Solar Farm Energy Production</h2>
-                <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Depending on the time of day, weather, and many other factors, the solar farm production is gathered and reported. {stats ? stats.total.name : "<company>"}'s portion of Clearloop projects is currently producing {stats ? String(stats.total["Energy Production (MWh)"]).substring(0, 5) : 0} megawatts per hour. 
-                </p>
-            </div>
+        // const step_font_size = unit_height < 75 ? 0.70 : 0.85;
+        // if(block === "step1") {
+        //     blocks[block].block = <div>
+        //         <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 1: Solar Farm Energy Production</h2>
+        //         <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Depending on the time of day, weather, and many other factors, the solar farm production is gathered and reported. {stats ? stats.total.name : "<company>"}'s portion of Clearloop projects is currently producing {stats ? String(stats.total["Energy Production (MWh)"]).substring(0, 5) : 0} megawatts per hour. 
+        //         </p>
+        //     </div>
 
-        }
-        if(block === "step2") {
-            blocks[block].block = <div>
-                <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 2: Marginal Emissions</h2>
-                <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Using data from WattTime, Clearloop calculates the marginal emissions. Marginal emissions are the rate at which emissions would change with a small change to electricity load (like turning on a light switch). The marginal emissions rate is currently {stats ? stats.total["moer"] : 0} lbs of carbon offset/MWh.</p>
-            </div>
-        }
-        if(block === "step3") {
-            blocks[block].block = <div>
-                <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 3: Carbon Offset</h2>
-                <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>The CO2 emissions offset by the solar farm are calculated by multiplying together the marginal emissions rate and the energy production. For a more accurate estimate, the marginal emissions data is acquired every 5 minutes. The carbon reclaimed from {stats ? stats.total.name : "<company>"}'s portion of Clearloop production this hour is approximately {stats ? String(stats.total["Carbon Avoided (lbs)"]).substring(0,6) : 0} lbs per hour.</p>
-            </div>
-        }
-        if(block === "step4") {
+        // }
+        // if(block === "step2") {
+        //     blocks[block].block = <div>
+        //         <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 2: Marginal Emissions</h2>
+        //         <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Using data from WattTime, Clearloop calculates the marginal emissions. Marginal emissions are the rate at which emissions would change with a small change to electricity load (like turning on a light switch). The marginal emissions rate is currently {stats ? stats.total["moer"] : 0} lbs of carbon offset/MWh.</p>
+        //     </div>
+        // }
+        // if(block === "step3") {
+        //     blocks[block].block = <div>
+        //         <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 3: Carbon Offset</h2>
+        //         <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>The CO2 emissions offset by the solar farm are calculated by multiplying together the marginal emissions rate and the energy production. For a more accurate estimate, the marginal emissions data is acquired every 5 minutes. The carbon reclaimed from {stats ? stats.total.name : "<company>"}'s portion of Clearloop production this hour is approximately {stats ? String(stats.total["Carbon Avoided (lbs)"]).substring(0,6) : 0} lbs per hour.</p>
+        //     </div>
+        // }
+        // if(block === "step4") {
 
-            let cost_string = ""
-            if(stats) {
-                cost_string = String(stats.total["health"]);
-            } else {
-                cost_string = "0.0";
-            }
+        //     let cost_string = ""
+        //     if(stats) {
+        //         cost_string = String(stats.total["health"]);
+        //     } else {
+        //         cost_string = "0.0";
+        //     }
             
-            const cost_string_parsed = cost_string.split('.');
-            const dollar_string = cost_string_parsed[0];
-            const cent_string = cost_string_parsed[1];
-            const cost_to_display = dollar_string + "." + cent_string.substring(0,2);
-            blocks[block].block = <div>
-                <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 4: Health Benefits Provided</h2>
-                <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Seven million people per year from air pollution. Fossil-fueled power plants emit pollutants that damage health like sulfur dioxide. These pollutants cause people living close to power plants to experience higher rates of health problems, such as asthma, heart disease, strokes, and premature death. {stats ? stats.total.name : "<company>"} has prevented approximately ${cost_to_display} of damage to human health during the last hour.</p>
-            </div>
-        }
+        //     const cost_string_parsed = cost_string.split('.');
+        //     const dollar_string = cost_string_parsed[0];
+        //     const cent_string = cost_string_parsed[1];
+        //     const cost_to_display = dollar_string + "." + cent_string.substring(0,2);
+        //     blocks[block].block = <div>
+        //         <h2 className='flex text-xl font-bold justify-left pl-4 pt-4' style={{color:"#AEB3C4"}}>Step 4: Health Benefits Provided</h2>
+        //         <p className='flex text-left pl-4 pt-2 text-sm' style={{ fontSize: `${step_font_size}rem` }}>Seven million people per year from air pollution. Fossil-fueled power plants emit pollutants that damage health like sulfur dioxide. These pollutants cause people living close to power plants to experience higher rates of health problems, such as asthma, heart disease, strokes, and premature death. {stats ? stats.total.name : "<company>"} has prevented approximately ${cost_to_display} of damage to human health during the last hour.</p>
+        //     </div>
+        // }
 
         if (block === "visibility") {
             const projects = stats?.projects || [];
@@ -982,7 +974,7 @@ export default function Dashboard({ stats }: { stats: any }) {
         }
 
         
-        if (block === "current_health") {
+        if (block === "cumulative_health") {
             const projects = stats?.projects || [];
             const currentProject = projects[selectedSiteIndex % projects.length];
 
@@ -1066,6 +1058,65 @@ export default function Dashboard({ stats }: { stats: any }) {
                 <div className="p-4">Loading...</div>
                 );
             }
+        }
+
+        if (block === "cumulative_carbon_avoided") {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
+
+            if (stats) {
+                const cost_string = String(stats.historical?.total?.[currentProject]?.co2 ?? "0.00");
+                const cost_string_parsed = cost_string.split('.');
+                const dollar_string = cost_string_parsed[0];
+                const cent_string = cost_string_parsed[1];
+                const comma_dollar_string = String(Number(dollar_string).toLocaleString('en-US'));
+                
+                const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
+
+                if (blockHeight > 75) {
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs font-bold mb-1 pt-2">Cumulative Carbon Avoided</h2>
+                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
+                } else {
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                    <h2 className="text-xs mb-1 pt-1">Cumulative Carbon Avoided</h2>
+                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
+                    <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                );
+                }
+            } else {
+                blocks[block].block = (
+                <div className="p-4">Loading...</div>
+                );
+            }
+        }
+
+        
+
+        if(block === "solar_panel_layout") {
+
+            blocks[block].block = (
+
+                 <div>
+                    <div className='w-full'>
+                        <h2 className='text-xs flex justify-left pl-4 pt-2'>Project Layout</h2>
+                        <img src="/placeholder_solar_panel_layout.png" alt="Rivian Logo" className='rounded-3xl p-4'/>
+                    </div>
+                </div>
+
+            )
         }
 
 

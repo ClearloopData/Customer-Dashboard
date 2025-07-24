@@ -73,13 +73,14 @@ export default function AuthPage() {
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+                className=" text-black px-4 py-2 rounded w-full"
+                style={{ background: "#F7E15D" }}
             >
                 {isLogin ? 'Log In' : 'Sign Up'}
             </button>
             </form>
 
-            <p className="mt-4 text-sm text-center">
+            {/* <p className="mt-4 text-sm text-center">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
             <button
                 onClick={() => setIsLogin(!isLogin)}
@@ -87,7 +88,7 @@ export default function AuthPage() {
             >
                 {isLogin ? 'Sign up' : 'Log in'}
             </button>
-            </p>
+            </p> */}
 
         </div>
     );
