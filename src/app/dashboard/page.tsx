@@ -706,12 +706,12 @@ export default function DashboardPage() {
                     Log Out
                 </button>
 
-                <div className="mt-6 p-4 bg-green-100 rounded shadow text-left">
+                {/* <div className="mt-6 p-4 bg-green-100 rounded shadow text-left">
                     <h2 className="text-xl font-semibold text-black">Company:</h2>
                     <pre className="mt-2 text-lg whitespace-pre-wrap text-black">
                     {JSON.stringify(stats, null, 2)}
                     </pre>
-                </div>
+                </div> */}
               
           </div>
       </ProtectedRoute>

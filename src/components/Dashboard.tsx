@@ -244,7 +244,7 @@ const blocks:any = {
 
 function calc_coordinate_dimension_system(screen_width: number) {
     if(screen_width >= 1200) return [9,10];
-    if(screen_width >= 800) return [6,19];
+    if(screen_width >= 800) return [6,14];
     return [4,25];
 }
 

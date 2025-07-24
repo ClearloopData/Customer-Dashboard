@@ -50,45 +50,51 @@ export default function AuthPage() {
         //all these long classnames are Tailwind CSS
         //these specifics map directly to specific styles that Tailwind defines
         //tl;dr these classNames make defining a nice style easy
-        <div className="max-w-md mx-auto mt-20 p-4 border rounded">
-            <h1 className="text-2xl font-bold mb-4">{isLogin ? 'Log In' : 'Sign Up'}</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                required
-            />
-            <input
-                type="password"
-                placeholder="Password (min 6 chars)"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                required
-            />
-            {/* && checks if error is "truthy" (not empty string, null, or undefined) */}
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button
-                type="submit"
-                className=" text-black px-4 py-2 rounded w-full"
-                style={{ background: "#F7E15D" }}
-            >
-                {isLogin ? 'Log In' : 'Sign Up'}
-            </button>
-            </form>
+        <div className="max-w-md mx-auto mt-20 p-4  rounded">
 
-            {/* <p className="mt-4 text-sm text-center">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-blue-500 underline"
-            >
-                {isLogin ? 'Sign up' : 'Log in'}
-            </button>
-            </p> */}
+            <img src="/auth_page_brandmark.png" alt="Rivian Logo" className=''/>
+
+            <div className="border rounded-2xl p-4">
+
+                <h1 className="text-2xl font-bold mb-4">{isLogin ? 'Log In' : 'Sign Up'}</h1>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className="w-full border px-3 py-2 rounded"
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password (min 6 chars)"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full border px-3 py-2 rounded"
+                    required
+                />
+                {/* && checks if error is "truthy" (not empty string, null, or undefined) */}
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                <button
+                    type="submit"
+                    className=" text-black px-4 py-2 rounded w-full"
+                    style={{ background: "#F7E15D" }}
+                >
+                    {isLogin ? 'Log In' : 'Sign Up'}
+                </button>
+                </form>
+
+                {/* <p className="mt-4 text-sm text-center">
+                {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+                <button
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="text-blue-500 underline"
+                >
+                    {isLogin ? 'Sign up' : 'Log in'}
+                </button>
+                </p> */}
+            </div>
 
         </div>
     );
