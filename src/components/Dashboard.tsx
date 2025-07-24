@@ -98,153 +98,160 @@ const weather_id_mappings: Record<number, Record<string, string>> = {
 
 
 //store all blocks that will be dynamically placed given screen width
-const blocks:any = {
+const blocks: any = {
+  logo: {
+    block: (
+      <div className="h-full">
+        <div className="flex justify-center items-center space-x-1">
+          <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />
+          <p className="text-xl">x</p>
+          <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+        </div>
+        <h2 className="text-sm">#RECS</h2>
+      </div>
+    ),
+    coor: { 12: [0, 0], 9: [0, 0], 6: [0, 0], 4: [0, 0] },
+    width: { 12: 1, 9: 1, 6: 1, 4: 1 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    logo: {
-        block: <div className='h-full'><div className="flex justify-center items-center space-x-1">
-                <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />X
-                <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
-            </div>
-            <h2 className='text-sm'>#RECS</h2>
-            </div>,
-        coor: { 9: [0, 0], 6: [0, 0], 4: [0, 0] },
-        width: { 9: 1, 6: 1, 4: 1 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  recs: {
+    block: <div><p>recs</p></div>,
+    coor: { 12: [1, 0], 9: [1, 0], 6: [1, 0], 4: [1, 0] },
+    width: { 12: 1, 9: 1, 6: 1, 4: 1 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    recs: {
-        block: <div><p>recs</p></div>,
-        coor: { 9: [1, 0], 6: [1, 0], 4: [1, 0] },
-        width: { 9: 1, 6: 1, 4: 1 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-    date_and_time: {
-        block: <div><h2>Date and time</h2></div>,
-        coor: { 9: [2, 0], 6: [2, 0], 4: [2, 0] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-    weather_summary_current: {
-        block: <div><h2>Weather Summary (current)</h2></div>,
-        coor: { 9: [4, 0], 6: [4, 0], 4: [0, 7] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
-    weather_summary_future: {
-        block: <div><h2>Weather Summary (future)</h2></div>,
-        coor: { 9: [4, 1], 6: [4, 1], 4: [0, 9] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 2, 6: 2, 4: 2 },
-    },
+  date_and_time: {
+    block: <div><h2>Date and time</h2></div>,
+    coor: { 12: [2, 0], 9: [2, 0], 6: [2, 0], 4: [2, 0] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    community_partnerships: {
-        block: <div><h2>Community partnerships (TODO)</h2></div>,
-        coor: { 9: [6, 0], 6: [3, 12], 4: [0, 24] },
-        width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 3, 6: 2, 4: 2 },
-    },
+  weather_summary_current: {
+    block: <div><h2>Weather Summary (current)</h2></div>,
+    coor: { 12: [4, 0], 9: [4, 0], 6: [4, 0], 4: [0, 7] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    steps: {
-        block: <div><h2>step 1</h2></div>,
-        coor: { 9: [6, 3], 6: [3, 10], 4: [0, 22] },
-        width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 3, 6: 2, 4: 2 },
-    },
+  weather_summary_future: {
+    block: <div><h2>Weather Summary (future)</h2></div>,
+    coor: { 12: [4, 1], 9: [4, 1], 6: [4, 1], 4: [0, 9] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 2, 9: 2, 6: 2, 4: 2 },
+  },
 
-    sunrise_sunset_on_spinning_globe: {
-        block: <div></div>,
-        coor: { 9: [2, 1], 6: [2, 1], 4: [2, 1] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+  community_partnerships: {
+    block: <div><h2>Community partnerships (TODO)</h2></div>,
+    coor: { 12: [6, 0], 9: [6, 0], 6: [3, 12], 4: [0, 24] },
+    width: { 12: 3, 9: 3, 6: 3, 4: 4 },
+    height: { 12: 2, 9: 3, 6: 2, 4: 2 },
+  },
 
-    radar_visualization: {
-        block: <div>
+  steps: {
+    block: <div><h2>step 1</h2></div>,
+    coor: { 12: [6, 2], 9: [6, 3], 6: [3, 10], 4: [0, 22] },
+    width: { 12: 3, 9: 3, 6: 3, 4: 4 },
+    height: { 12: 2, 9: 3, 6: 2, 4: 2 },
+  },
 
-        </div>,
-        coor: { 9: [4, 3], 6: [4, 3], 4: [2, 7] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 4 },
-    },
+  sunrise_sunset_on_spinning_globe: {
+    block: <div></div>,
+    coor: { 12: [2, 1], 9: [2, 1], 6: [2, 1], 4: [2, 1] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+  },
 
-    current_mwh: {
-        block: <div><p>current MWh output per project</p></div>,
-        coor: { 9: [0, 1], 6: [0, 1], 4: [0, 1] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+  radar_visualization: {
+    block: <div></div>,
+    coor: { 12: [4, 3], 9: [4, 3], 6: [4, 3], 4: [2, 7] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 4 },
+  },
 
-    current_carbon_avoided: {
-        block: <div><p>current carbon avoided</p></div>,
-        coor: { 9: [0, 4], 6: [0, 4], 4: [0, 4] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+  current_mwh: {
+    block: <div><p>current MWh output per project</p></div>,
+    coor: { 12: [0, 1], 9: [0, 1], 6: [0, 1], 4: [0, 1] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+  },
 
-    cumulative_production: {
-        block: <div><p>cumulative_production</p></div>,
-        coor: { 9: [2, 4], 6: [2, 4], 4: [2, 4] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  current_carbon_avoided: {
+    block: <div><p>current carbon avoided</p></div>,
+    coor: { 12: [0, 4], 9: [0, 4], 6: [0, 4], 4: [0, 4] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+  },
 
-    cumulative_health: {
-        block: <div><p>current health</p></div>,
-        coor: { 9: [2, 5], 6: [2, 5], 4: [2, 5] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  cumulative_production: {
+    block: <div><p>cumulative_production</p></div>,
+    coor: { 12: [2, 4], 9: [2, 4], 6: [2, 4], 4: [2, 4] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    cumulative_carbon_avoided: {
-        block: <div><p>carbon avoided</p></div>,
-        coor: { 9: [2, 6], 6: [2, 6], 4: [2, 6] },
-        width: { 9: 2, 6: 2, 4: 2 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  cumulative_health: {
+    block: <div><p>current health</p></div>,
+    coor: { 12: [2, 5], 9: [2, 5], 6: [2, 5], 4: [2, 5] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    visibility: {
-        block: <div><p>visibility</p></div>,
-        coor: { 9: [4, 6], 6: [4, 6], 4: [0, 8] },
-        width: { 9: 1, 6: 1, 4: 1 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  cumulative_carbon_avoided: {
+    block: <div><p>carbon avoided</p></div>,
+    coor: { 12: [2, 6], 9: [2, 6], 6: [2, 6], 4: [2, 6] },
+    width: { 12: 2, 9: 2, 6: 2, 4: 2 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    humidity: {
-        block: <div><p>humidity</p></div>,
-        coor: { 9: [5, 6], 6: [5, 6], 4: [1, 8] },
-        width: { 9: 1, 6: 1, 4: 1 },
-        height: { 9: 1, 6: 1, 4: 1 },
-    },
+  visibility: {
+    block: <div><p>visibility</p></div>,
+    coor: { 12: [4, 6], 9: [4, 6], 6: [4, 6], 4: [0, 8] },
+    width: { 12: 1, 9: 1, 6: 1, 4: 1 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    historic_mwh: {
-        block: <div><p>historic MHw (month), all time</p></div>,
-        coor: { 9: [0, 7], 6: [0, 7], 4: [0, 11] },
-        width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+  humidity: {
+    block: <div><p>humidity</p></div>,
+    coor: { 12: [5, 6], 9: [5, 6], 6: [5, 6], 4: [1, 8] },
+    width: { 12: 1, 9: 1, 6: 1, 4: 1 },
+    height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+  },
 
-    historic_carbon_avoided: {
-        block: <div><p>historic carbon avoided (month), all time</p></div>,
-        coor: { 9: [3, 7], 6: [3, 7], 4: [0, 14] },
-        width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 3, 6: 3, 4: 3 },
-    },
+  historic_mwh: {
+    block: <div><p>historic MHw (month), all time</p></div>,
+    coor: { 12: [6, 4], 9: [0, 7], 6: [0, 7], 4: [0, 11] },
+    width: { 12: 3, 9: 3, 6: 3, 4: 4 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+  },
 
-    solar_panel_layout: {
-        block: 
-        <div>
-            <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Project Layout</h2>
-        </div>,
-        coor: { 9: [6, 6], 6: [0, 10], 4: [0, 17] },
-        width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 4, 6: 4, 4: 5 },
-    },
-}
+  historic_carbon_avoided: {
+    block: <div><p>historic carbon avoided (month), all time</p></div>,
+    coor: { 12: [9, 4], 9: [3, 7], 6: [3, 7], 4: [0, 14] },
+    width: { 12: 3, 9: 3, 6: 3, 4: 4 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+  },
+
+  solar_panel_layout: {
+    block: (
+      <div>
+        <h2 className="text-xs flex justify-left pl-4 pt-2 pb-4">Project Layout</h2>
+      </div>
+    ),
+    coor: { 12: [9, 0], 9: [6, 6], 6: [0, 10], 4: [0, 17] },
+    width: { 12: 3, 9: 3, 6: 3, 4: 4 },
+    height: { 12: 4, 9: 4, 6: 4, 4: 5 },
+  },
+};
+
 
 
 function calc_coordinate_dimension_system(screen_width: number) {
-    if(screen_width >= 1200) return [9,10];
-    if(screen_width >= 800) return [6,14];
+    if(screen_width >= 1600) return [12,7]
+    if(screen_width >= 1000) return [9,10];
+    if(screen_width >= 600) return [6,14];
     return [4,26];
 }
 
