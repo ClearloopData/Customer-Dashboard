@@ -50,7 +50,7 @@ export default function AuthPage() {
         //all these long classnames are Tailwind CSS
         //these specifics map directly to specific styles that Tailwind defines
         //tl;dr these classNames make defining a nice style easy
-        <div className="max-w-md mx-auto mt-20 p-4  rounded">
+        <div className="max-w-md mx-auto mt-20 p-4 bg-green rounded">
 
             <img src="/auth_page_brandmark.png" alt="Rivian Logo" className=''/>
 
