@@ -454,6 +454,10 @@ export default function Dashboard({ stats }: { stats: any }) {
 
 
         if (block === "logo") {
+
+            //example of 1-tall
+            console.log("1-tall: ", blockHeight);
+
             if (stats) {
                 blocks[block].block = (
                 <div>
@@ -492,6 +496,9 @@ export default function Dashboard({ stats }: { stats: any }) {
             }
 
         if (block === "sunrise_sunset_on_spinning_globe") {
+
+            //example of 3-tall
+            console.log("3-tall: ", blockHeight);
 
             if(stats)
             blocks[block].block = <div>
@@ -597,6 +604,10 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         //weather forecast
         if (block === "weather_summary_future") {
+
+            //example of 2-tall
+            console.log("2-tall: ", blockHeight);
+
             const projects = stats?.projects || [];
             const forecastData = stats?.weatherForcastData || {};
             const currentProject = projects[selectedSiteIndex % projects.length];
@@ -742,7 +753,7 @@ export default function Dashboard({ stats }: { stats: any }) {
             }
         }
 
-        const step_font_size = unit_height < 75 ? 1 : 1.25;
+        const step_font_size = unit_height < 75 ? 0.8 : 1;
         if (block === "steps") {
         const steps = [
             {

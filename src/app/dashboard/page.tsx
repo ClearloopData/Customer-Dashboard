@@ -327,7 +327,7 @@ export default function DashboardPage() {
                 //current weather
                 try {
                     const weather = await getWeatherAtCoords(lat, lon);
-                    console.log('Current Weather for', project, weather);
+                    // console.log('Current Weather for', project, weather);
 
                     //success
                     to_ret[project] = weather;
@@ -342,7 +342,7 @@ export default function DashboardPage() {
                 //forcasted weather
                 try {
                     const weather = await getForecastAtCoords(lat, lon);
-                    console.log('Forcasted Weather for', project, weather);
+                    // console.log('Forcasted Weather for', project, weather);
 
                     //success
                     to_ret[project + "-forcast"] = weather;
@@ -415,10 +415,10 @@ export default function DashboardPage() {
         }
 
         for(let key in percentage_of_project) {
-            console.log("Project:", key, "total %:", percentage_of_project[key]*100, "%");
+            // console.log("Project:", key, "total %:", percentage_of_project[key]*100, "%");
         }
 
-        console.log("Company:", customer_company)
+        // console.log("Company:", customer_company)
 
         const to_ret: Record<string, any> = {};
 
@@ -443,12 +443,11 @@ export default function DashboardPage() {
             //add coordinates
             to_ret["coors"].push(project_name_to_lat_lon[project]);
 
-            console.log("CURRENT STATE", realtimeData["lastHour"][project])
-            console.log("TEST")
+            // console.log("CURRENT STATE", realtimeData["lastHour"][project])
 
             const production = Number(realtimeData["lastHour"][project]["mwh"]);
 
-            console.log(project, "produces", production, " (MWh)")
+            // console.log(project, "produces", production, " (MWh)")
 
             const region = project_name_to_region[project];
             const marginal_operating_emissions_rate = moerData[region];
@@ -483,9 +482,9 @@ export default function DashboardPage() {
 
             to_ret["projects"].push(project);
 
-            console.log("TOTALS   proj: ", project, "production: ", production,"moer: ", marginal_operating_emissions_rate, "lbs carbon avoided", carbon_avoided);
+            // console.log("TOTALS   proj: ", project, "production: ", production,"moer: ", marginal_operating_emissions_rate, "lbs carbon avoided", carbon_avoided);
 
-            console.log(customer_company, "at", project,"avoided", customer_company_carbon_avoided, "lbs of carbon in the last hour because they generated", customer_company_production, "MWh of electricity\n\n")
+            // console.log(customer_company, "at", project,"avoided", customer_company_carbon_avoided, "lbs of carbon in the last hour because they generated", customer_company_production, "MWh of electricity\n\n")
         }
 
 
@@ -494,7 +493,7 @@ export default function DashboardPage() {
 
             const project = csvData[i]["Project Name"];
 
-            console.log("PROJECT", project)
+            // console.log("PROJECT", project)
 
             //get associated info
             const contract_start = csvData[i]["Executed Contract Date"];
