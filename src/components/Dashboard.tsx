@@ -139,14 +139,14 @@ const blocks:any = {
 
     community_partnerships: {
         block: <div><h2>Community partnerships (TODO)</h2></div>,
-        coor: { 9: [6, 0], 6: [3, 12], 4: [0, 23] },
+        coor: { 9: [6, 0], 6: [3, 12], 4: [0, 24] },
         width: { 9: 3, 6: 3, 4: 4 },
         height: { 9: 3, 6: 2, 4: 2 },
     },
 
     steps: {
         block: <div><h2>step 1</h2></div>,
-        coor: { 9: [6, 3], 6: [3, 10], 4: [0, 21] },
+        coor: { 9: [6, 3], 6: [3, 10], 4: [0, 22] },
         width: { 9: 3, 6: 3, 4: 4 },
         height: { 9: 3, 6: 2, 4: 2 },
     },
@@ -237,7 +237,7 @@ const blocks:any = {
         </div>,
         coor: { 9: [6, 6], 6: [0, 10], 4: [0, 17] },
         width: { 9: 3, 6: 3, 4: 4 },
-        height: { 9: 4, 6: 4, 4: 4 },
+        height: { 9: 4, 6: 4, 4: 5 },
     },
 }
 
@@ -245,7 +245,7 @@ const blocks:any = {
 function calc_coordinate_dimension_system(screen_width: number) {
     if(screen_width >= 1200) return [9,10];
     if(screen_width >= 800) return [6,14];
-    return [4,25];
+    return [4,26];
 }
 
 function calc_unit_and_space_width(screen_width: number, num_units_wide: number) {
