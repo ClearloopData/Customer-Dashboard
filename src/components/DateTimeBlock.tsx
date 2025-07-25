@@ -24,6 +24,8 @@ export default function DateTimeBlock({ x_coor_system }: Props) {
     day: 'numeric'
   });
 
+  console.log("COOR SYSTEM", x_coor_system)
+
   if(x_coor_system == 4) {
       return (
       <div className="flex flex-col items-start justify-start pl-4 pt-1 w-full h-full">

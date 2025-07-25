@@ -503,8 +503,7 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         //date and time
         if(block === "date_and_time") {
-            if(coordinate_system[0] == 4)
-                blocks[block].block = <div><DateTimeBlock x_coor_system={coordinate_system[0]}/></div>;
+            blocks[block].block = <div><DateTimeBlock x_coor_system={coordinate_system[0]}/></div>;
         }
 
         if (block === "sunrise_sunset_on_spinning_globe") {
@@ -626,6 +625,10 @@ export default function Dashboard({ stats }: { stats: any }) {
 
             const forecastList = forecastData[currentProject] || [];
 
+            let cNgrid = "grid grid-cols-4 gap-x-6";
+            const y_gap = coordinate_system[0] == 4 ? " gap-y-0" : " gap-y-2";
+            cNgrid += y_gap;
+
             if (forecastList.length > 0) {
                 const displayCount = Math.min(8, forecastList.length);
                 const slicedForecast = forecastList.slice(0, displayCount);
@@ -636,7 +639,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                         className="h-full w-full p-4 cursor-pointer flex items-center justify-center"
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                        <div className="grid grid-cols-4 gap-x-6 gap-y-2">
+                        <div className={cNgrid}>
                         {slicedForecast.map((forecast: any, index: number) => {
                             const icon = weather_id_mappings[forecast.id]?.icon || "01d.png";
                             const desc = weather_id_mappings[forecast.id]?.desc || "Clear";
@@ -668,6 +671,29 @@ export default function Dashboard({ stats }: { stats: any }) {
                 >
                     Loading forecast...
                 </div>
+                );
+            }
+        }
+
+        if(block === "community_partnerships") {
+
+            const step_font_size = unit_height < 75 ? 0.8 : 1;
+            if(stats) {
+
+                let cNh2 = "flex font-bold justify-left pl-4";
+                const h2_size = coordinate_system[0] <= 6 ? " text-m pt-2" : " text-xl pt-4";
+                cNh2 += h2_size;
+                let cNp = "flex text-left pl-4 pt-1 text-xs";
+
+                blocks[block].block = (
+                    <div
+                    className="p-4 cursor-pointer"
+                    >
+                        <h2 className={cNh2} style={{ color: "#F7E15D" }}>Community Partnerships</h2>
+                        <p className={cNp} style={{ fontSize: `${step_font_size}rem` }}>
+                            TODO: sync this box with forms/data from community partnerships team to provide up-to-date summary of ways in which the specific Clearloop project site is engaging with the community.
+                        </p>
+                    </div>
                 );
             }
         }
@@ -1150,6 +1176,8 @@ export default function Dashboard({ stats }: { stats: any }) {
 
             )
         }
+
+        
 
 
 
