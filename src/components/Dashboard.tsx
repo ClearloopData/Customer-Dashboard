@@ -145,16 +145,16 @@ const blocks: any = {
 
   community_partnerships: {
     block: <div><h2>Community partnerships (TODO)</h2></div>,
-    coor: { 12: [6, 0], 9: [6, 0], 6: [3, 12], 4: [0, 24] },
+    coor: { 12: [6, 0], 9: [6, 0], 6: [3, 12], 4: [0, 28] },
     width: { 12: 3, 9: 3, 6: 3, 4: 4 },
     height: { 12: 2, 9: 3, 6: 2, 4: 2 },
   },
 
   steps: {
     block: <div><h2>step 1</h2></div>,
-    coor: { 12: [6, 2], 9: [6, 3], 6: [3, 10], 4: [0, 22] },
+    coor: { 12: [6, 2], 9: [6, 3], 6: [3, 10], 4: [0, 25] },
     width: { 12: 3, 9: 3, 6: 3, 4: 4 },
-    height: { 12: 2, 9: 3, 6: 2, 4: 2 },
+    height: { 12: 2, 9: 3, 6: 2, 4: 3 },
   },
 
   sunrise_sunset_on_spinning_globe: {
@@ -224,14 +224,14 @@ const blocks: any = {
     block: <div><p>historic MHw (month), all time</p></div>,
     coor: { 12: [6, 4], 9: [0, 7], 6: [0, 7], 4: [0, 11] },
     width: { 12: 3, 9: 3, 6: 3, 4: 4 },
-    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 4 },
   },
 
   historic_carbon_avoided: {
     block: <div><p>historic carbon avoided (month), all time</p></div>,
-    coor: { 12: [9, 4], 9: [3, 7], 6: [3, 7], 4: [0, 14] },
+    coor: { 12: [9, 4], 9: [3, 7], 6: [3, 7], 4: [0, 15] },
     width: { 12: 3, 9: 3, 6: 3, 4: 4 },
-    height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+    height: { 12: 3, 9: 3, 6: 3, 4: 4 },
   },
 
   solar_panel_layout: {
@@ -240,9 +240,9 @@ const blocks: any = {
         <h2 className="text-xs flex justify-left pl-4 pt-2 pb-4">Project Layout</h2>
       </div>
     ),
-    coor: { 12: [9, 0], 9: [6, 6], 6: [0, 10], 4: [0, 17] },
+    coor: { 12: [9, 0], 9: [6, 6], 6: [0, 10], 4: [0, 19] },
     width: { 12: 3, 9: 3, 6: 3, 4: 4 },
-    height: { 12: 4, 9: 4, 6: 4, 4: 5 },
+    height: { 12: 4, 9: 4, 6: 4, 4: 6 },
   },
 };
 
@@ -252,7 +252,7 @@ function calc_coordinate_dimension_system(screen_width: number) {
     if(screen_width >= 1600) return [12,7]
     if(screen_width >= 1000) return [9,10];
     if(screen_width >= 600) return [6,14];
-    return [4,26];
+    return [4,30];
 }
 
 function calc_unit_and_space_width(screen_width: number, num_units_wide: number) {
@@ -455,6 +455,8 @@ export default function Dashboard({ stats }: { stats: any }) {
         let blockWidth = Math.round(get_width_or_height(coor_width, unit_width, space_width));
         let blockHeight = Math.round(get_width_or_height(coor_height, unit_height, space_width));
 
+        const SMALL_TEXT_THRESHOLD = 70;
+
 
         //conditional attributes
         
@@ -465,14 +467,16 @@ export default function Dashboard({ stats }: { stats: any }) {
             //example of 1-tall
             console.log("1-tall: ", blockHeight);
 
+            const logo_width = blockWidth >= 120 ? 60 : 40;
+
             if (stats) {
                 blocks[block].block = (
                 <div>
                     <div className="h-full w-full flex flex-col items-center justify-center">
-                        <div className="flex items-center justify-center space-x-1">
-                        <img src="/rivian_logo.png" width={60} alt="Rivian Logo" />
-                        <span className="text-lg">X</span>
-                        <img src="/clearloop_infinity_white.png" width={60} alt="Clearloop Logo" />
+                        <div className="flex items-center justify-center space-x-0.5">
+                        <img src="/rivian_logo.png" width={logo_width} alt="Rivian Logo" />
+                        <span className="text-sm">X</span>
+                        <img src="/clearloop_infinity_white.png" width={logo_width} alt="Clearloop Logo" />
                         </div>
                     </div>
                 </div>
@@ -482,14 +486,15 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         if(block === "recs") {
 
+            const cNp =  width > 450 ? "text-l font-bold" : "text-xs font-bold";
+
             if(stats)
     
-
                 blocks[block].block = (
                     <div>
                         <div className="h-full w-full flex flex-col items-center justify-center">
                             <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
-                            <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+                            <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
                         </div>
                     </div>
                 );
@@ -500,7 +505,7 @@ export default function Dashboard({ stats }: { stats: any }) {
         if(block === "date_and_time") {
             if(coordinate_system[0] == 4)
                 blocks[block].block = <div><DateTimeBlock x_coor_system={coordinate_system[0]}/></div>;
-            }
+        }
 
         if (block === "sunrise_sunset_on_spinning_globe") {
 
@@ -795,19 +800,26 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         const currentStep = steps[currentStepIndex];
 
+        let cNh2 = "flex font-bold justify-left pl-4";
+        const h2_size = coordinate_system[0] <= 6 ? " text-m pt-2" : " text-xl pt-4";
+        cNh2 += h2_size;
+
+        let cNp = "flex text-left pl-4 pt-1 text-xs";
+
+
         blocks[block].block = (
             <div
             className="p-4 cursor-pointer"
             onClick={() => setCurrentStepIndex((prev) => (prev + 1) % steps.length)}
             >
             <h2
-                className="flex text-xl font-bold justify-left pl-4 pt-4"
+                className={cNh2}
                 style={{ color: "#F7E15D" }}
             >
                 {currentStep.title}
             </h2>
             <p
-                className="flex text-left pl-4 pt-2 text-sm"
+                className={cNp}
                 style={{ fontSize: `${step_font_size}rem` }}
             >
                 {currentStep.content}
@@ -866,7 +878,7 @@ export default function Dashboard({ stats }: { stats: any }) {
 
             const visibilityValue = weatherData[currentProject]?.visibility ?? "N/A";
 
-            if(blockHeight > 75) {
+            if(blockHeight > SMALL_TEXT_THRESHOLD) {
 
                 blocks[block].block = (
                     <div
@@ -882,11 +894,11 @@ export default function Dashboard({ stats }: { stats: any }) {
 
                 blocks[block].block = (
                     <div
-                        className="p-4 cursor-pointer flex flex-col items-start"
+                        className="p-0 cursor-pointer flex flex-col items-start"
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                        <h2 className="text-xs mb-1 pt-1">Visibility</h2>
-                        <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{visibilityValue} ft</p>
+                        <h2 className="text-xs pt-0">Visibility</h2>
+                        <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{visibilityValue} ft</p>
                         <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -901,7 +913,7 @@ export default function Dashboard({ stats }: { stats: any }) {
 
             const humidityValue = weatherData[currentProject]?.humidity ?? "N/A";
 
-            if(blockHeight > 75) {
+            if(blockHeight > SMALL_TEXT_THRESHOLD) {
 
                 blocks[block].block = (
                     <div
@@ -917,11 +929,11 @@ export default function Dashboard({ stats }: { stats: any }) {
 
                 blocks[block].block = (
                     <div
-                        className="p-4 cursor-pointer flex flex-col items-start"
+                        className="p-0 cursor-pointer flex flex-col items-start"
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                        <h2 className="text-xs mb-1 pt-1">Humidity</h2>
-                        <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{humidityValue}%</p>
+                        <h2 className="text-xs pt-0">Humidity</h2>
+                        <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{humidityValue}%</p>
                         <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -953,6 +965,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                         boxWidth={blockWidth}
                         boxHeight={Math.round(blockHeight * 0.9)}
                         unit={"MWh"}
+                        x_coor_system={coordinate_system[0]}
                     />
                 </div>
             } else {
@@ -986,6 +999,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                         boxWidth={blockWidth}
                         boxHeight={Math.round(blockHeight)}
                         unit={"lbs (1000s)"}
+                        x_coor_system={coordinate_system[0]}
                     />
                 </div>
             }
@@ -1005,7 +1019,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                 
                 const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
 
-                if (blockHeight > 75) {
+                if (blockHeight > SMALL_TEXT_THRESHOLD) {
                 blocks[block].block = (
                     <div
                     className="p-4 cursor-pointer"
@@ -1019,11 +1033,11 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
                 blocks[block].block = (
                     <div
-                    className="p-4 cursor-pointer"
+                    className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                    <h2 className="text-xs mb-1 pt-1">Saved Healthcare Costs</h2>
-                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
+                    <h2 className="text-xs pt-0">Saved Healthcare Costs</h2>
+                    <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -1048,7 +1062,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                 
                 const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
 
-                if (blockHeight > 75) {
+                if (blockHeight > SMALL_TEXT_THRESHOLD) {
                 blocks[block].block = (
                     <div
                     className="p-4 cursor-pointer"
@@ -1062,11 +1076,11 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
                 blocks[block].block = (
                     <div
-                    className="p-4 cursor-pointer"
+                    className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                    <h2 className="text-xs mb-1 pt-1">Cumulative Production</h2>
-                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
+                    <h2 className="text-xs pt-0">Cumulative Production</h2>
+                    <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -1091,7 +1105,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                 
                 const cost_to_display = comma_dollar_string + "." + cent_string.substring(0, 2);
 
-                if (blockHeight > 75) {
+                if (blockHeight > SMALL_TEXT_THRESHOLD) {
                 blocks[block].block = (
                     <div
                     className="p-4 cursor-pointer"
@@ -1105,11 +1119,11 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
                 blocks[block].block = (
                     <div
-                    className="p-4 cursor-pointer"
+                    className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
-                    <h2 className="text-xs mb-1 pt-1">Cumulative Carbon Avoided</h2>
-                    <p className="text-l font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
+                    <h2 className="text-xs pt-0">Cumulative Carbon Avoided</h2>
+                    <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );

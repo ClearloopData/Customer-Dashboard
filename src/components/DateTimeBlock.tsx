@@ -26,9 +26,9 @@ export default function DateTimeBlock({ x_coor_system }: Props) {
 
   if(x_coor_system == 4) {
       return (
-      <div className="flex flex-col items-start justify-start pl-4 pt-4 w-full h-full">
-        <h2 className="text-l font-bold">{formattedTime}</h2>
-        <h2 className="text-sm">{formattedDate}</h2>
+      <div className="flex flex-col items-start justify-start pl-4 pt-1 w-full h-full">
+        <h2 className="text-m font-bold">{formattedTime}</h2>
+        <h2 className="text-xs">{formattedDate}</h2>
       </div>
       );
   }

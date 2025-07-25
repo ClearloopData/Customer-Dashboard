@@ -10,13 +10,15 @@ export default function MixedBarChart({
   projects,
   boxWidth = 500,
   boxHeight = 300,
-  unit = "MWh"
+  unit = "MWh",
+  x_coor_system=4
 }: {
   data: any[],
   projects: string[],
   boxWidth?: number,
   boxHeight?: number,
   unit?: string
+  x_coor_system?: number
 }) {
   // Extract unique years from the data, sorted descending
   const allYears = useMemo(() => {
@@ -46,6 +48,8 @@ export default function MixedBarChart({
     return data.filter(entry => entry.month.startsWith(selectedYear + "-"));
   }, [data, selectedYear]);
 
+  const axis_text_size = x_coor_system == 4 ? 12 : 16;
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* Year selector */}
@@ -53,7 +57,7 @@ export default function MixedBarChart({
         <div className="flex items-center justify-end pr-4 mt-2">
           <label className="text-xs mr-2 text-gray-400"></label>
           <select
-            className="text-xs bg-neutral-800 border border-gray-700 rounded px-2 py-1"
+            className="text-xs bg-neutral-800 border border-gray-700 rounded px-2 py-0"
             value={selectedYear}
             onChange={e => setSelectedYear(e.target.value)}
             onClick={(e) => e.stopPropagation()}  // PREVENT click from bubbling to parent
@@ -78,13 +82,14 @@ export default function MixedBarChart({
           <XAxis
             dataKey="month"
             tickFormatter={(month) => String(parseInt(month.split('-')[1], 10))}
-            label={{ value: 'Month', position: 'insideBottom', offset: -5 }}
+            label={{ value: 'Month', position: 'insideBottom', offset: -5, style: { fontSize: 12 }}}
+            
           />
 
           <YAxis
             label={
               <text
-                style={{ fill: '#999', fontSize: 16 }}
+                style={{ fill: '#999', fontSize: axis_text_size }}
                 transform="rotate(-90)"
                 dy={30}
                 dx={-80}
