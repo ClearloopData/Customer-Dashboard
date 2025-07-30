@@ -1281,7 +1281,7 @@ export default function Dashboard({ stats }: { stats: any }) {
         renderedBlocks.push(
             <div
             key="help-overlay"
-            className="fixed bottom-16 left-1/2 transform -translate-x-1/2 text-black p-4 rounded shadow-lg z-50 max-w-md text-sm"
+            className="fixed bottom-16 left-1/2 transform -translate-x-1/2 text-black p-4 rounded shadow-lg z-1001 max-w-md text-sm"
             style={{ background: "#F7E15D", color: "#000000"}}
             >
             <p>{description}</p>
