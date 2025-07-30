@@ -51,10 +51,13 @@ export default function DashboardPage() {
     const [weatherData, setWeatherData] = useState<any>(null);
     //track if we're logged into shared user BEFORE attempting to get data from firebase
     const [dbReady, setDbReady] = useState(false);
+    //automatically refresh data every 5 minutes
+    const [refreshCount, setRefreshCount] = useState(0);
     
     // TODO: comment if this works
     const [relevantProjects, setRelevantProjects] = useState<Array<string>>([]);
     const [relevantRegions, setRelevantRegions] = useState<Array<string>>([]);
+    
 
 
 
@@ -131,7 +134,7 @@ export default function DashboardPage() {
         };
 
         fetchCSV();
-    }, []);
+    }, [refreshCount]);
 
 
 
@@ -169,7 +172,7 @@ export default function DashboardPage() {
             }
         };
         fetchMoer();
-    }, [dbReady]);
+    }, [dbReady, refreshCount]);
 
     //React hook to fetch health data from Firebase
     useEffect(() => {
@@ -205,7 +208,7 @@ export default function DashboardPage() {
             }
         };
         fetchHealth();
-    }, [dbReady]);
+    }, [dbReady, refreshCount]);
 
     //React hook to fetch realtime data from Firebase
     useEffect(() => {
@@ -271,7 +274,7 @@ export default function DashboardPage() {
             }
         };
         fetchRealtime();
-    }, [dbReady]);
+    }, [dbReady, refreshCount]);
 
     //React hook to fetch historical data from Firebase
     useEffect(() => {
@@ -309,7 +312,7 @@ export default function DashboardPage() {
             }
         };
         fetchHistorical();
-    }, [dbReady]);
+    }, [dbReady, refreshCount]);
 
     //React hook to fetch weather data
     useEffect(() => {
@@ -365,7 +368,7 @@ export default function DashboardPage() {
 
         fetchWeather();
 
-    }, [weatherReady, user, loading]);
+    }, [weatherReady, user, loading, refreshCount]);
 
     // Makes React wait to call calculateStats until all three datasets are available
     useEffect(() => {
@@ -375,6 +378,23 @@ export default function DashboardPage() {
             setStats(ret);
         }
     }, [csvData, moerData, healthData, realtimeData, historicalData, weatherData]);
+
+
+    // React effect for waiting 5 minutes, then refreshing the data
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log("Refreshing data...");
+            setRefreshCount((prev) => prev + 1);
+        }, 300000); // 5 minutes
+
+        return () => clearInterval(interval);
+    }, []);
+
+
+
+
+
+
 
     async function fetchAllData() {
 
