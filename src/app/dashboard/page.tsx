@@ -261,6 +261,8 @@ export default function DashboardPage() {
                 }
                 filtered_realtime_data["lastHour"] = filtered_lastHour_data;
 
+                console.log("REALTIME DATA", filtered_realtime_data)
+
                 //set data
                 setRealtimeData(filtered_realtime_data);
 
@@ -365,7 +367,7 @@ export default function DashboardPage() {
 
     }, [weatherReady, user, loading]);
 
-    //Makes React wait to call calculateStats until all three datasets are available
+    // Makes React wait to call calculateStats until all three datasets are available
     useEffect(() => {
 
         if (csvData != undefined && moerData != undefined && healthData != undefined && realtimeData != undefined && historicalData != undefined && weatherData != undefined) {
@@ -373,6 +375,40 @@ export default function DashboardPage() {
             setStats(ret);
         }
     }, [csvData, moerData, healthData, realtimeData, historicalData, weatherData]);
+
+    async function fetchAllData() {
+
+        const [csvReady, moerReady, healthReady, realReady, histReady, weatherReady] =
+            [csvData, moerData, healthData, realtimeData, historicalData, weatherData];
+
+        if (
+            csvReady !== undefined &&
+            moerReady !== undefined &&
+            healthReady !== undefined &&
+            realReady !== undefined &&
+            histReady !== undefined &&
+            weatherReady !== undefined
+        ) {
+            const newStats = calculateStats(
+            csvData,
+            moerData,
+            healthData,
+            realtimeData,
+            historicalData,
+            weatherData
+            );
+            setStats(newStats);
+        }
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchAllData(); //refetch the most recent Firebase data and recalculate stats
+        }, 300000); //5 minutes 
+
+        return () => clearInterval(interval);
+    }, [csvData, moerData, healthData, realtimeData, historicalData, weatherData]);
+
 
 
 
@@ -432,7 +468,8 @@ export default function DashboardPage() {
             "Capacity (%)": 0,
             "name" : CUSTOMER_COMPANY,
             "health": 0,
-            "RECs": 0
+            "RECs": 0,
+            "Carbon Credits": 0,
 
         }
 
@@ -454,7 +491,9 @@ export default function DashboardPage() {
             const marginal_operating_emissions_rate = moerData[region];
             const health_damage = healthData[region];
 
-            const carbon_avoided = production * marginal_operating_emissions_rate;
+            //OLD CALCULATION
+            //const carbon_avoided = production * marginal_operating_emissions_rate;
+            const carbon_avoided = Number(realtimeData["lastHour"][project]["co2"]);
             const customer_company_carbon_avoided = carbon_avoided * percentage_of_project[project];
             const customer_company_production = production * percentage_of_project[project];
 
@@ -499,10 +538,26 @@ export default function DashboardPage() {
             //get associated info
             const contract_start = csvData[i]["Executed Contract Date"];
             to_ret[project]["Contract Start"] = contract_start;
-            const recs = csvData[i]["RECs"];
-            //TODO: fix this calculation
-            to_ret["total"]["RECs"] += (percentage_of_project[project] * Number(recs.replace(",", "")));
 
+            const recs_or_carbon_credits = csvData[i]["Credits or RECs"];
+            const number = csvData[i]["RECs"];
+            if(recs_or_carbon_credits === "RECs") {
+                to_ret[project]["Credits or RECs"] = "RECs"
+                to_ret[project]["RECs"] = number;
+                to_ret[project]["Carbon Credits"] = 0;
+                to_ret["total"]["RECs"] += (percentage_of_project[project] * Number(number.replace(",", "")));
+
+            } else if(recs_or_carbon_credits === "Credits") {
+                to_ret[project]["Credits or RECs"] = "Carbon Credits"
+                to_ret[project]["RECs"] = 0;
+                to_ret[project]["Carbon Credits"] = number;
+                to_ret["total"]["Carbon Credits"] += (percentage_of_project[project] * Number(number.replace(",", "")));
+
+            } else {
+                to_ret[project]["Credits or RECs"] = "Error"
+                console.log("ZError: neither RECs nor Carbon Credits");
+            }
+            
         }
 
         //historic data
@@ -706,12 +761,12 @@ export default function DashboardPage() {
                     Log Out
                 </button>
 
-                {/* <div className="mt-6 p-4 bg-green-100 rounded shadow text-left">
+                <div className="mt-6 p-4 bg-green-100 rounded shadow text-left">
                     <h2 className="text-xl font-semibold text-black">Company:</h2>
                     <pre className="mt-2 text-lg whitespace-pre-wrap text-black">
                     {JSON.stringify(stats, null, 2)}
                     </pre>
-                </div> */}
+                </div>
               
           </div>
       </ProtectedRoute>

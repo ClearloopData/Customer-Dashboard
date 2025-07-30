@@ -415,47 +415,86 @@ export default function Dashboard({ stats }: { stats: any }) {
             }
         }
 
-        if(block === "recs") {
+        if (block === "recs") {
+            const projects = stats?.projects || [];
+            const currentProject = projects[selectedSiteIndex % projects.length];
+            const siteStats = stats?.[currentProject];
 
-            const cNp =  width > 450 ? "text-l font-bold" : "text-xs font-bold";
+            const key = siteStats?.["Credits or RECs"];
+            const number = siteStats?.[key];
 
-            if(stats)
-    
-                blocks[block].block = (
-                    
-                    <div>
-                        <HoverInfoBox
-                            info={blocks[block].text}
-                            position="bottom"
-                            width={220}
+
+            if(siteStats) {
+
+                if(blockHeight > SMALL_TEXT_THRESHOLD) {
+
+                    blocks[block].block = (
+                        <div
+                            className="p-4 cursor-pointer flex flex-col items-start"
+                            onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                         >
-                            <div className="h-full w-full flex flex-col items-center justify-center">
-                                <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
-                                <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
-                            </div>
-                        </HoverInfoBox>
-                    </div>
+                            <h2 className="text-xs font-bold mb-1 pt-2">{key}</h2>
+                            <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>{number}</p>
+                            <p className="text-xs text-gray-400">{currentProject}</p>
+                        </div>
+                    );
+                } else {
 
-
-                );
-
-                // blocks[block].block = (
-                //     <div>
-                //         <HoverInfoBox
-                //             info={<p>Renewable Energy Certificates earned from project participation.</p>}
-                //             position="bottom"
-                //             width={220}
-                //         >
-                //             <div>
-                //                 <div className="h-full w-full flex flex-col items-center justify-center">
-                //                     <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
-                //                     <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
-                //                 </div>
-                //             </div>
-                //         </HoverInfoBox>
-                //     </div>
-                // );
+                    blocks[block].block = (
+                        <div
+                            className="p-0 cursor-pointer flex flex-col items-start"
+                            onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                        >
+                            <h2 className="text-xs pt-0">{key}</h2>
+                            <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{number}</p>
+                            <p className="text-xs text-gray-400">{currentProject}</p>
+                        </div>
+                    );
+                }
+            }
         }
+
+        // if(block === "recs") {
+
+        //     const cNp =  width > 450 ? "text-l font-bold" : "text-xs font-bold";
+
+        //     if(stats)
+    
+        //         blocks[block].block = (
+                    
+        //             <div>
+        //                 <HoverInfoBox
+        //                     info={blocks[block].text}
+        //                     position="bottom"
+        //                     width={220}
+        //                 >
+        //                     <div className="h-full w-full flex flex-col items-center justify-center">
+        //                         <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
+        //                         <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+        //                     </div>
+        //                 </HoverInfoBox>
+        //             </div>
+
+
+        //         );
+
+        //         // blocks[block].block = (
+        //         //     <div>
+        //         //         <HoverInfoBox
+        //         //             info={<p>Renewable Energy Certificates earned from project participation.</p>}
+        //         //             position="bottom"
+        //         //             width={220}
+        //         //         >
+        //         //             <div>
+        //         //                 <div className="h-full w-full flex flex-col items-center justify-center">
+        //         //                     <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
+        //         //                     <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+        //         //                 </div>
+        //         //             </div>
+        //         //         </HoverInfoBox>
+        //         //     </div>
+        //         // );
+        // }
 
 
         //date and time
