@@ -7,94 +7,19 @@ import dynamic from 'next/dynamic';
 import RadarMapWrapper from '@/components/RadarMapWrapper';
 import DateTimeBlock from '@/components/DateTimeBlock';
 import MixedBarChart from '@/components/MixedBarChart';
-import {project_name_to_max_mwh} from '@/components/projectData';
-
+import {project_name_to_max_mwh, weather_id_mappings, helpSteps} from '@/components/projectData';
+import HoverInfoBox from '@/components/HoverInfoBox';
 //import Dial from '@/components/Dial'; 
 
 const Dial = dynamic(() => import('@/components/Dial'), { ssr: false });
 const PieChartGraph = dynamic(() => import('@/components/PieChart'), { ssr: false });
-
-
 
 const SpinningGlobe = dynamic(() => import('@/components/SpinningGlobe'), {
   ssr: false
 });
 
 
-
 const ASPECT_RATIO = 4/2.25;
-
-const weather_id_mappings: Record<number, Record<string, string>> = {
-
-    // Group 2xx: Thunderstorm
-    200: { desc: "Thunderstorm, light rain", icon: "11d.png" },
-    201: { desc: "Thunderstorm, moderate rain", icon: "11d.png" },
-    202: { desc: "Thunderstorm, heavy rain", icon: "11d.png" },
-    210: { desc: "Light thunderstorm", icon: "11d.png" },
-    211: { desc: "Thunderstorm", icon: "11d.png" },
-    212: { desc: "Heavy thunderstorm", icon: "11d.png" },
-    221: { desc: "Ragged thunderstorm", icon: "11d.png" },
-    230: { desc: "Thunderstorm, light drizzle", icon: "11d.png" },
-    231: { desc: "Thunderstorm, drizzle", icon: "11d.png" },
-    232: { desc: "Thunderstorm, heavy drizzle", icon: "11d.png" },
-
-    // Group 3xx: Drizzle
-    300: { desc: "Light drizzle", icon: "09d.png" },
-    301: { desc: "Drizzle", icon: "09d.png" },
-    302: { desc: "Heavy drizzle", icon: "09d.png" },
-    310: { desc: "Light drizzle rain", icon: "09d.png" },
-    311: { desc: "Drizzle rain", icon: "09d.png" },
-    312: { desc: "Heavy drizzle rain", icon: "09d.png" },
-    313: { desc: "Shower rain and drizzle", icon: "09d.png" },
-    314: { desc: "Heavy shower rain and drizzle", icon: "09d.png" },
-    321: { desc: "Shower drizzle", icon: "09d.png" },
-
-    // Group 5xx: Rain
-    500: { desc: "Light rain", icon: "10d.png" },
-    501: { desc: "Moderate rain", icon: "10d.png" },
-    502: { desc: "Heavy rain", icon: "10d.png" },
-    503: { desc: "Very heavy rain", icon: "10d.png" },
-    504: { desc: "Extreme rain", icon: "10d.png" },
-    511: { desc: "Freezing rain", icon: "13d.png" },
-    520: { desc: "Light shower rain", icon: "09d.png" },
-    521: { desc: "Shower rain", icon: "09d.png" },
-    522: { desc: "Heavy shower rain", icon: "09d.png" },
-    531: { desc: "Ragged shower rain", icon: "09d.png" },
-
-    // Group 6xx: Snow
-    600: { desc: "Light snow", icon: "13d.png" },
-    601: { desc: "Snow", icon: "13d.png" },
-    602: { desc: "Heavy snow", icon: "13d.png" },
-    611: { desc: "Sleet", icon: "13d.png" },
-    612: { desc: "Light shower sleet", icon: "13d.png" },
-    613: { desc: "Shower sleet", icon: "13d.png" },
-    615: { desc: "Light rain and snow", icon: "13d.png" },
-    616: { desc: "Rain and snow", icon: "13d.png" },
-    620: { desc: "Light shower snow", icon: "13d.png" },
-    621: { desc: "Shower snow", icon: "13d.png" },
-    622: { desc: "Heavy shower snow", icon: "13d.png" },
-
-    // Group 7xx: Atmosphere
-    701: { desc: "Misty", icon: "50d.png" },
-    711: { desc: "Smoky", icon: "50d.png" },
-    721: { desc: "Hazy", icon: "50d.png" },
-    731: { desc: "Dust whirls", icon: "50d.png" },
-    741: { desc: "Foggy", icon: "50d.png" },
-    751: { desc: "Sandy", icon: "50d.png" },
-    761: { desc: "Dusty", icon: "50d.png" },
-    762: { desc: "Volcanic ash", icon: "50d.png" },
-    771: { desc: "Squalls", icon: "50d.png" },
-    781: { desc: "Tornado", icon: "50d.png" },
-
-    // Group 800: Clear
-    800: { desc: "Clear sky", icon: "01d.png" },
-
-    // Group 80x: Clouds
-    801: { desc: "Few clouds", icon: "02d.png" },
-    802: { desc: "Scattered clouds", icon: "03d.png" },
-    803: { desc: "Broken clouds", icon: "04d.png" },
-    804: { desc: "Overcast clouds", icon: "04d.png" },
-};
 
 
 //store all blocks that will be dynamically placed given screen width
@@ -120,6 +45,7 @@ const blocks: any = {
     coor: { 12: [1, 0], 9: [1, 0], 6: [1, 0], 4: [1, 0] },
     width: { 12: 1, 9: 1, 6: 1, 4: 1 },
     height: { 12: 1, 9: 1, 6: 1, 4: 1 },
+    text: <p>Renewable Energy Certificates earned from project participation.</p>
   },
 
   date_and_time: {
@@ -176,6 +102,7 @@ const blocks: any = {
     coor: { 12: [0, 1], 9: [0, 1], 6: [0, 1], 4: [0, 1] },
     width: { 12: 2, 9: 2, 6: 2, 4: 2 },
     height: { 12: 3, 9: 3, 6: 3, 4: 3 },
+    text: <p>Current MWh.</p>
   },
 
   current_carbon_avoided: {
@@ -425,6 +352,10 @@ export default function Dashboard({ stats }: { stats: any }) {
     const [weatherProjectIndex, setWeatherProjectIndex] = useState(0);
     const [selectedSiteIndex, setSelectedSiteIndex] = useState(0);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    //for tutorial mode
+    const [helpMode, setHelpMode] = useState(false);
+    const [helpStepIndex, setHelpStepIndex] = useState(0);
+
 
 
 
@@ -491,13 +422,39 @@ export default function Dashboard({ stats }: { stats: any }) {
             if(stats)
     
                 blocks[block].block = (
+                    
                     <div>
-                        <div className="h-full w-full flex flex-col items-center justify-center">
-                            <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
-                            <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
-                        </div>
+                        <HoverInfoBox
+                            info={blocks[block].text}
+                            position="bottom"
+                            width={220}
+                        >
+                            <div className="h-full w-full flex flex-col items-center justify-center">
+                                <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
+                                <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+                            </div>
+                        </HoverInfoBox>
                     </div>
+
+
                 );
+
+                // blocks[block].block = (
+                //     <div>
+                //         <HoverInfoBox
+                //             info={<p>Renewable Energy Certificates earned from project participation.</p>}
+                //             position="bottom"
+                //             width={220}
+                //         >
+                //             <div>
+                //                 <div className="h-full w-full flex flex-col items-center justify-center">
+                //                     <h2 className="text-xs mb-1 pt-1">Total RECs</h2>
+                //                     <p className={cNp} style={{ color: "#F7E15D" }}>{stats.total.RECs.toLocaleString('en-US')}</p>
+                //                 </div>
+                //             </div>
+                //         </HoverInfoBox>
+                //     </div>
+                // );
         }
 
 
@@ -707,13 +664,22 @@ export default function Dashboard({ stats }: { stats: any }) {
 
                 blocks[block].block = 
                 <div>
+                    <HoverInfoBox
+                            info=
+                            {
+                                <p>Clouds are shown in light gray; precipitation is shown in color based on storm severity.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
+                    
                     <RadarMapWrapper
                     lat={35.5}
                     lon={-89.5}
                     zoom={4}
                     coors={stats.coors}
                     />
-                </div>
+                </HoverInfoBox></div>
             }
         }
 
@@ -737,13 +703,22 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer flex flex-col items-center"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                 >
-                    <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Current MWh Production: {currentProject}</h2>
-                    <Dial
-                    percent={dialPercent}
-                    label={`${mwhValue.toFixed(2)} MWh`}
-                    boxWidth={dialWidth}
-                    boxHeight={dialHeight}
-                    />
+                    <HoverInfoBox
+                            info=
+                            {
+                                <p>The output of a solar farm varies based on factors like weather, the time of day, and the time of year. This dial represents the production of {stats ? stats.total.name : "<company>"}'s share of {currentProject} output over the last hour.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
+                        <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Current MWh Production: {currentProject}</h2>
+                        <Dial
+                        percent={dialPercent}
+                        label={`${mwhValue.toFixed(2)} MWh`}
+                        boxWidth={dialWidth}
+                        boxHeight={dialHeight}
+                        />
+                    </HoverInfoBox>
                 </div>
                 );
             } else {
@@ -771,17 +746,26 @@ export default function Dashboard({ stats }: { stats: any }) {
             
 
                 blocks[block].block = (
+                    
                 <div
                     className="p-4 cursor-pointer flex flex-col items-center"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                 >
-                    <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Carbon Avoided (hour): {currentProject}</h2>
-                    <Dial
-                    percent={dialPercent}
-                    label={`${carbonValue.toFixed(2)} lbs/hour`}
-                    boxWidth={dialWidth}
-                    boxHeight={dialHeight}
-                    />
+                    <HoverInfoBox
+                            info={
+                                <p>Clearloop uses the sun to generate clean energy. This dial displays the amount of carbon dioxide that would have been created if the electricity had instead been sourced from fossil fuels. Thanks to {stats ? stats.total.name : "<company>"}'s commitment to the {currentProject} project, Clearloop is helping to limit the emission of carbon into the atmosphere.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
+                        <h2 className='text-xs flex justify-left pl-4 pt-2 pb-4'>Carbon Avoided (hour): {currentProject}</h2>
+                        <Dial
+                        percent={dialPercent}
+                        label={`${carbonValue.toFixed(2)} lbs/hour`}
+                        boxWidth={dialWidth}
+                        boxHeight={dialHeight}
+                        />
+                    </HoverInfoBox>
                 </div>
                 );
             } else {
@@ -912,7 +896,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
                         <h2 className="text-xs font-bold mb-1 pt-2">Visibility</h2>
-                        <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{visibilityValue} ft</p>
+                        <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>{visibilityValue} ft</p>
                         <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -947,7 +931,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                         onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
                         <h2 className="text-xs font-bold mb-1 pt-2">Humidity</h2>
-                        <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{humidityValue}%</p>
+                        <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>{humidityValue}%</p>
                         <p className="text-xs text-gray-400">{currentProject}</p>
                     </div>
                 );
@@ -984,15 +968,24 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                 >
-                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic MWh Production: {currentProject}</h2>
-                    <MixedBarChart
-                        data={historicalData}
-                        projects={[currentProject]}
-                        boxWidth={blockWidth}
-                        boxHeight={Math.round(blockHeight * 0.9)}
-                        unit={"MWh"}
-                        x_coor_system={coordinate_system[0]}
-                    />
+                    <HoverInfoBox
+                            info={
+                                <p>The energy production of {stats ? stats.total.name : "<company>"}'s share of the {currentProject} project each month.</p>
+                            }
+                            position="top"
+                            width={220}
+                        >
+                    
+                        <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic MWh Production: {currentProject}</h2>
+                        <MixedBarChart
+                            data={historicalData}
+                            projects={[currentProject]}
+                            boxWidth={blockWidth}
+                            boxHeight={Math.round(blockHeight * 0.9)}
+                            unit={"MWh"}
+                            x_coor_system={coordinate_system[0]}
+                        />
+                    </HoverInfoBox>
                 </div>
             } else {
                 blocks[block].block = <div>Loading...</div>
@@ -1018,15 +1011,23 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                 >
-                    <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic Carbon Avoided: {currentProject}</h2>
-                    <MixedBarChart
-                        data={historicalCO2Data}
-                        projects={[currentProject]}
-                        boxWidth={blockWidth}
-                        boxHeight={Math.round(blockHeight)}
-                        unit={"lbs (1000s)"}
-                        x_coor_system={coordinate_system[0]}
-                    />
+                    <HoverInfoBox
+                            info={
+                                <p>The amount of carbon dioxide emissions that have been avoided each month, thanks to {stats ? stats.total.name : "<company>"}'s contribution to the {currentProject} project. See the "Carbon Avoided (hour)" dial for more information.</p>
+                            }
+                            position="top"
+                            width={220}
+                        >
+                        <h2 className='text-xs flex justify-left pl-4 pt-2'>Historic Carbon Avoided: {currentProject}</h2>
+                        <MixedBarChart
+                            data={historicalCO2Data}
+                            projects={[currentProject]}
+                            boxWidth={blockWidth}
+                            boxHeight={Math.round(blockHeight)}
+                            unit={"lbs (1000s)"}
+                            x_coor_system={coordinate_system[0]}
+                        />
+                    </HoverInfoBox>
                 </div>
             }
         }
@@ -1051,9 +1052,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>TODO: ask Winston for wording</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs font-bold mb-1 pt-2">Saved Healthcare Costs</h2>
-                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
+                    <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
+                    </HoverInfoBox>
                     </div>
                 );
                 } else {
@@ -1062,10 +1071,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>TODO</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs pt-0">Saved Healthcare Costs</h2>
                     <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
-                    </div>
+                    </HoverInfoBox></div>
                 );
                 }
             } else {
@@ -1094,10 +1110,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>The total energy production of {stats ? stats.total.name : "<company>"}'s share of the {currentProject} project.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs font-bold mb-1 pt-2">Cumulative Production</h2>
-                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
+                    <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
-                    </div>
+                    </HoverInfoBox></div>
                 );
                 } else {
                 blocks[block].block = (
@@ -1105,10 +1128,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>The total energy production of {stats ? stats.total.name : "<company>"}'s share of the {currentProject} project.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs pt-0">Cumulative Production</h2>
                     <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} MWh</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
-                    </div>
+                    </HoverInfoBox></div>
                 );
                 }
             } else {
@@ -1137,10 +1167,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-4 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>The total amount of carbon dioxide emissions that have been avoided thanks to {stats ? stats.total.name : "<company>"}'s contribution to the {currentProject} project. See the "Carbon Avoided (hour)" dial for more information.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs font-bold mb-1 pt-2">Cumulative Carbon Avoided</h2>
-                    <p className="text-2xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
+                    <p className="text-xl font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
-                    </div>
+                    </HoverInfoBox></div>
                 );
                 } else {
                 blocks[block].block = (
@@ -1148,10 +1185,17 @@ export default function Dashboard({ stats }: { stats: any }) {
                     className="p-0 cursor-pointer"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
+                        <HoverInfoBox
+                            info={
+                                <p>The total amount of carbon dioxide emissions that have been avoided thanks to {stats ? stats.total.name : "<company>"}'s contribution to the {currentProject} project. See the "Carbon Avoided (hour)" dial for more information.</p>
+                            }
+                            position="bottom"
+                            width={220}
+                        >
                     <h2 className="text-xs pt-0">Cumulative Carbon Avoided</h2>
                     <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{cost_to_display} lbs</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
-                    </div>
+                    </HoverInfoBox></div>
                 );
                 }
             } else {
@@ -1177,13 +1221,28 @@ export default function Dashboard({ stats }: { stats: any }) {
             )
         }
 
-        
+
+        //for tutorial/help mode
+        // let isCurrentHelpBlock = helpMode && helpSteps[helpStepIndex]?.blockKey === block;
+        // let isOtherHelpBlock = helpMode && !isCurrentHelpBlock;
+
+        const currentHelpKeys = helpMode ? helpSteps[helpStepIndex]?.blockKeys || [] : [];
+        const isCurrentHelpBlock = currentHelpKeys.includes(block);
+        const isOtherHelpBlock = helpMode && !isCurrentHelpBlock;
 
 
+        // if (isCurrentHelpBlock) {
+        //     blocks[block].block = (
+        //         <div>
+                 
+        //             {blocks[block].block}
+                 
+        //         </div>
+        //     );
+        // }
 
 
-        
-        
+    
         //set these attributes
         const styledDiv = React.cloneElement(blocks[block].block, {
             key: block,
@@ -1198,6 +1257,13 @@ export default function Dashboard({ stats }: { stats: any }) {
                 margin: `${space_width}px`,
                 color: 'rgb(234, 234, 239)',
 
+                //tutorial/help mode
+                opacity: isOtherHelpBlock ? 0.2 : 1,
+                filter: isOtherHelpBlock ? 'blur(2px)' : 'none',
+                pointerEvents: isOtherHelpBlock ? 'none' : 'auto',
+
+
+
             },
             
 
@@ -1210,7 +1276,54 @@ export default function Dashboard({ stats }: { stats: any }) {
 
     }
 
+    if (helpMode && helpSteps[helpStepIndex]) {
+        const { description } = helpSteps[helpStepIndex];
+        renderedBlocks.push(
+            <div
+            key="help-overlay"
+            className="fixed bottom-16 left-1/2 transform -translate-x-1/2 text-black p-4 rounded shadow-lg z-50 max-w-md text-sm"
+            style={{ background: "#F7E15D", color: "#000000"}}
+            >
+            <p>{description}</p>
+            <div className="flex justify-between mt-2">
+                <button
+                onClick={() => setHelpStepIndex((i) => Math.max(i - 1, 0))}
+                disabled={helpStepIndex === 0}
+                className='bg-neutral-900 pt-1 pb-1 pl-4 pr-4 rounded-lg text-white'
+                >
+                Prev
+                </button>
+                <button
+                onClick={() => {
+                    if (helpStepIndex + 1 >= helpSteps.length) {
+                    setHelpMode(false); // auto exit
+                    } else {
+                    setHelpStepIndex((i) => i + 1);
+                    }
+                }}
+                className='bg-neutral-900 pt-1 pb-1 pl-4 pr-4 rounded-lg text-white'
+                >
+                {helpStepIndex + 1 >= helpSteps.length ? "Finish" : "Next"}
+                </button>
+            </div>
+            </div>
+        );
+        }
+
     
-    return <div style={{ background: "rgb(0, 0, 0)", height: `${get_width_or_height(coordinate_system[1], unit_height, space_width) + space_width * 2}px` }} className='relative shadow font-azo'>{renderedBlocks}</div>;
+    return <div style={{ background: "rgb(0, 0, 0)", height: `${get_width_or_height(coordinate_system[1], unit_height, space_width) + space_width * 2}px` }} className='relative shadow font-azo'>{renderedBlocks}
+    
+        <button
+            className="fixed bottom-4 right-4 z-50 px-4 py-2 text-black font-bold rounded shadow-xl/20"
+            style={{ background: "#F7E15D"}}
+            onClick={() => {
+                setHelpMode(!helpMode);
+                setHelpStepIndex(0); // reset help step
+            }}
+            >
+            {helpMode ? "Exit Help" : "Help"}
+        </button>
+
+    </div>;
 
 }

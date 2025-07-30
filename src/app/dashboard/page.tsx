@@ -25,19 +25,6 @@ import {project_name_to_region, project_name_to_firebase_name, project_name_to_m
 
 export default function DashboardPage() {
 
-    //sign user into DB
-    // useEffect(() => {
-    //   signInToSharedDB();
-    // }, []);
-
-    useEffect(() => {
-        async function loginAndSetReady() {
-            await signInToSharedDB();
-            setDbReady(true);
-        }
-
-        loginAndSetReady();
-    }, []);
 
 
     /*
@@ -78,7 +65,11 @@ export default function DashboardPage() {
     //customer company (this will always be known by the time of 
     // login in the future, although it won't be hard-coded like 
     // this obviously)
-    const customer_company = "Rivian"
+    const CUSTOMER_COMPANY: string = "Rivian";
+
+    
+
+
 
 
     
@@ -92,6 +83,16 @@ export default function DashboardPage() {
     /*
     EFFECT HOOKS
     */
+
+    //React hook to sign into shared DB
+    useEffect(() => {
+        async function loginAndSetReady() {
+            await signInToSharedDB();
+            setDbReady(true);
+        }
+
+        loginAndSetReady();
+    }, []);
 
     //React hook to fetch data from csv file
     useEffect(() => {
@@ -107,7 +108,7 @@ export default function DashboardPage() {
 
             // Loop through each row in the CSV file...
             for (let row of parsed.data) {
-                if (row["Clearloop Partner"] === customer_company) {
+                if (row["Clearloop Partner"] === CUSTOMER_COMPANY) {
                     filtered_customer_company_data.push(row);
 
                     const project_name = row["Project Name"];
@@ -429,7 +430,7 @@ export default function DashboardPage() {
             "Carbon Avoided (lbs)": 0,
             "MAX (MWh)": 0,
             "Capacity (%)": 0,
-            "name" : customer_company,
+            "name" : CUSTOMER_COMPANY,
             "health": 0,
             "RECs": 0
 
