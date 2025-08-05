@@ -23,8 +23,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
     - dashboard: react hooks, data loading and preprocessing for dashboard
     - components: all the components for the dashboard, INCLUDING DASHBOARD LAYOUT CODE
 
+## Deployment
+- Deployed on Vercel
+
 ## Next Steps
 - Determine how customers will be granted access/create account, etc (i.e. do we add their email directly to Firebase, make an automated system, etc?)
     - add logo for all companies (only Rivian currently)
 - Layout resizing, general UI: lots of testing and improvements
 - Settings menu (light mode, etc)
+
+

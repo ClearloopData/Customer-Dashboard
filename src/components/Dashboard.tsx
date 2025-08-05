@@ -431,14 +431,16 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
 
                     blocks[block].block = (
-                        <div
-                            className="p-0 cursor-pointer flex flex-col items-start"
-                            onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
-                        >
-                            <h2 className="text-xs pt-0">{key}</h2>
-                            <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{number}</p>
-                            <p className="text-xs text-gray-400">{currentProject}</p>
-                        </div>
+                    <div>
+                    <div
+                        className="p-0 cursor-pointer flex flex-col items-center justify-center h-full w-full"
+                        onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
+                    >
+                        <h2 className="text-xs pt-0">{key}</h2>
+                        <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>{number}</p>
+                        <p className="text-xs text-gray-400">{currentProject}</p>
+                    </div>
+                    </div>
                     );
                 }
             }
@@ -1091,7 +1093,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
                 blocks[block].block = (
                     <div
-                    className="p-0 cursor-pointer"
+                    className="p-0 cursor-pointer flex flex-col items-center justify-center h-full w-full"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
                         <HoverInfoBox
@@ -1105,6 +1107,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                     <p className="text-xs font-bold" style={{ color: "#F7E15D" }}>${cost_to_display}</p>
                     <p className="text-xs text-gray-400">{currentProject}</p>
                     </HoverInfoBox></div>
+                    
                 );
                 }
             } else {
@@ -1148,7 +1151,7 @@ export default function Dashboard({ stats }: { stats: any }) {
                 } else {
                 blocks[block].block = (
                     <div
-                    className="p-0 cursor-pointer"
+                    className="p-0 cursor-pointer flex flex-col items-center justify-center h-full w-full"
                     onClick={() => setSelectedSiteIndex((prev) => (prev + 1) % projects.length)}
                     >
                         <HoverInfoBox
