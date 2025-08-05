@@ -25,6 +25,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Next Steps
 - Determine how customers will be granted access/create account, etc (i.e. do we add their email directly to Firebase, make an automated system, etc?)
-- Test code works for all customers (currently testing on Rivian only, but it should work in theory)
+    - add logo for all companies (only Rivian currently)
 - Layout resizing, general UI: lots of testing and improvements
 - Settings menu (light mode, etc)

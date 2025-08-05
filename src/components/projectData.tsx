@@ -30,7 +30,8 @@ export const project_name_to_max_mwh: Record<string, number> = {
     "Panola II": 4.75,
     "Panola III": 3.5,
     "Paris BPU": 1,
-    "White Pine": 2.8
+    "White Pine": 2.8,
+    "Arcadia": 0.0 //TODO: update when known
 };
 
 //mapping project to its lat and lon
@@ -41,7 +42,8 @@ export const project_name_to_lat_lon: Record<string, any> = {
     "Panola II": { lat: 34.34085632, lng: -89.91117261, label: "Panola II"},
     "Panola III": { lat: 34.302365, lng: -89.987844, label: "Panola II"},
     "Paris BPU": { lat: 36.4463, lng: -88.327083, label: "Paris BPU"},
-    "White Pine": { lat: 36.123581, lng: -83.284975, label: "White Pine"}
+    "White Pine": { lat: 36.123581, lng: -83.284975, label: "White Pine"},
+    "Arcadia": { lat: 32.562749, lng: -92.922857, label: "Arcadia"}
 
 };
 
