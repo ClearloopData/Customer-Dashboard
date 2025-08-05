@@ -78,7 +78,7 @@ const Needle: React.FC<NeedleProps> = ({ angle, cx, cy, iR, oR }) => {
 };
 
 interface DialProps {
-  percent?: number; // Between 0 and 1
+  percent?: number; 
   label?: string;
   boxWidth?: number;
   boxHeight?: number;
@@ -158,4 +158,5 @@ const Dial: React.FC<DialProps> = ({
   );
 };
 
+//dials for dashboard, see Dashboard.tsx for usage
 export default Dial;

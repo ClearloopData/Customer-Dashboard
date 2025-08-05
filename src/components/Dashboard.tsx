@@ -1,23 +1,17 @@
 // components/Dashboard.tsx
-import useWindowSize from '@/app/dashboard/useWindowSize';
+import useWindowSize from '@/components/useWindowSize';
 import React from 'react';
-import { useEffect, useState, useMemo } from 'react';
-import PieSlice from '@/components/PieSlice';
+import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import RadarMapWrapper from '@/components/RadarMapWrapper';
 import DateTimeBlock from '@/components/DateTimeBlock';
 import MixedBarChart from '@/components/MixedBarChart';
-import {project_name_to_max_mwh, weather_id_mappings, helpSteps} from '@/components/projectData';
+import {weather_id_mappings, helpSteps} from '@/components/projectData';
 import HoverInfoBox from '@/components/HoverInfoBox';
-//import Dial from '@/components/Dial'; 
-
 const Dial = dynamic(() => import('@/components/Dial'), { ssr: false });
-const PieChartGraph = dynamic(() => import('@/components/PieChart'), { ssr: false });
-
 const SpinningGlobe = dynamic(() => import('@/components/SpinningGlobe'), {
   ssr: false
 });
-
 
 const ASPECT_RATIO = 4/2.25;
 
@@ -172,7 +166,6 @@ const blocks: any = {
     height: { 12: 4, 9: 4, 6: 4, 4: 6 },
   },
 };
-
 
 
 function calc_coordinate_dimension_system(screen_width: number) {
@@ -395,9 +388,6 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         if (block === "logo") {
 
-            //example of 1-tall
-            console.log("1-tall: ", blockHeight);
-
             const logo_width = blockWidth >= 120 ? 60 : 40;
 
             if (stats) {
@@ -504,9 +494,6 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         if (block === "sunrise_sunset_on_spinning_globe") {
 
-            //example of 3-tall
-            console.log("3-tall: ", blockHeight);
-
             if(stats)
             blocks[block].block = <div>
                     <div>
@@ -611,9 +598,6 @@ export default function Dashboard({ stats }: { stats: any }) {
 
         //weather forecast
         if (block === "weather_summary_future") {
-
-            //example of 2-tall
-            console.log("2-tall: ", blockHeight);
 
             const projects = stats?.projects || [];
             const forecastData = stats?.weatherForcastData || {};

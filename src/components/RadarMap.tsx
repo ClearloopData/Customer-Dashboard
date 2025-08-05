@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Custom Clearloop Icon
+//Clearloop infinity icon
 const clearloopIcon = L.icon({
   iconUrl: '/clearloop_infinity_white.png',
   iconSize: [40, 30],
@@ -14,6 +14,7 @@ const clearloopIcon = L.icon({
   className: ''
 });
 
+//radar map box on dashboard; overlays gray (clouds) and rain (color) over a map
 export default function RadarMap({
   lat = 37.7749,
   lon = -122.4194,
@@ -38,7 +39,6 @@ export default function RadarMap({
       });
   }, []);
 
-  // Prevent SSR error
   if (!mounted) return null;
 
   return (
@@ -56,14 +56,14 @@ export default function RadarMap({
         zoomControl={false}
         attributionControl={false}
       >
-        {/* Base Dark Map */}
+        {/* dark map */}
         <TileLayer
           attribution='&copy; CartoDB'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           zIndex={1}
         />
 
-        {/* Cloud Cover Layer from OpenWeatherMap */}
+        {/* clouds */}
         <TileLayer
           opacity={0.4}
           zIndex={5}
@@ -71,7 +71,7 @@ export default function RadarMap({
           url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=ed191c23444c0fb62ca1d17b0d87ca7b`}
         />
 
-        {/* Transparent Radar Overlay */}
+        {/* rain */}
         {radarTime && (
           <TileLayer
             opacity={0.6}
@@ -80,7 +80,7 @@ export default function RadarMap({
           />
         )}
 
-        {/* Multiple Markers with Popup Labels */}
+        {/* markers with popup labels */}
         {coors.map((coor: any, idx: any) => (
           <Marker
             key={idx}

@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-// Clearloop brand gradient colors
 const CLEARLOOP_COLORS = ['#F7E15D', '#787E9B', '#FFFCD1', '#AEB3C4'];
 
+//pie chart for dashboard; see Dashboard.tsx for usage example
 export default function PieChartGraph({
   boxWidth = 400,
   boxHeight = 300,
@@ -18,7 +18,8 @@ export default function PieChartGraph({
   colors = CLEARLOOP_COLORS,
   unit = "MWh"
 }) {
-  // Animation states
+
+
   const [animatedWidth, setAnimatedWidth] = useState(boxWidth);
   const [animatedHeight, setAnimatedHeight] = useState(boxHeight);
 
@@ -51,7 +52,6 @@ export default function PieChartGraph({
     };
   }, [width, height]);
 
-  /** ✅ Add this transformation: replace non-positive values with 1 so chart always renders */
   const safeData = useMemo(() => {
     return data.map((d) => ({
       ...d,
@@ -59,11 +59,9 @@ export default function PieChartGraph({
     }));
   }, [data]);
 
-  /** ✅ Use real sum of original data for center label */
   const total = useMemo(() => data.reduce((sum, entry) => sum + entry.value, 0), [data]);
   const formattedTotal = String(total / 100).substring(0, 5);
 
-  // Custom label renderer — use original value for labels
   const renderCustomLabel = (props) => {
     const { cx, cy, midAngle, outerRadius, index } = props;
     const RADIAN = Math.PI / 180;
@@ -117,7 +115,7 @@ export default function PieChartGraph({
         </defs>
 
         <Pie
-          data={safeData}   // ✅ use transformed data
+          data={safeData}  
           dataKey="value"
           cx={cx}
           cy={cy}
@@ -137,7 +135,6 @@ export default function PieChartGraph({
           ))}
         </Pie>
 
-        {/* Center label */}
         <text
           x={cx}
           y={cy}

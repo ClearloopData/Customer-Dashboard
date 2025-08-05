@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+//allows dashboard to use the live window size in calculations
 export default function useWindowSize() {
         const [windowSize, setWindowSize] = useState({
             width: 0,
@@ -14,10 +15,8 @@ export default function useWindowSize() {
             });
             };
 
-            // Set initial size
             handleResize();
 
-            // Add event listener
             window.addEventListener("resize", handleResize);
 
             return () => window.removeEventListener("resize", handleResize);

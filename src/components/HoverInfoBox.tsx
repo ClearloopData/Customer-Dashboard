@@ -11,6 +11,7 @@ type Props = {
   width?: number | string;
 };
 
+//see Dashboard.tsx for usage
 export default function HoverInfoBox({
   children,
   info,

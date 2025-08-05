@@ -15,6 +15,7 @@ interface Props {
   blockHeight: number;
 }
 
+//spinning globe box on dashboard
 export default function SpinningGlobe({ points, blockWidth, blockHeight }: Props) {
   const globeRef = useRef<HTMLDivElement>(null);
   const globeInstanceRef = useRef<GlobeInstance | null>(null);
@@ -23,7 +24,6 @@ export default function SpinningGlobe({ points, blockWidth, blockHeight }: Props
   useEffect(() => {
     if (!globeRef.current) return;
 
-    // Clear existing Globe instance
     if (globeInstanceRef.current) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       while (globeRef.current.firstChild) {
@@ -35,7 +35,7 @@ export default function SpinningGlobe({ points, blockWidth, blockHeight }: Props
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
       .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
       .showAtmosphere(true)
-      .atmosphereColor('#3a228a')
+      .atmosphereColor('#F7E15D')
       .atmosphereAltitude(0.25)
       .backgroundColor('rgba(0,0,0,0)')
       .width(blockWidth)

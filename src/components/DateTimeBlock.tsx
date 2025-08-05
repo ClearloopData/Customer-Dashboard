@@ -6,6 +6,7 @@ type Props = {
   x_coor_system: number;
 };
 
+//block on Dashboard that shows the date and time
 export default function DateTimeBlock({ x_coor_system }: Props) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -23,8 +24,6 @@ export default function DateTimeBlock({ x_coor_system }: Props) {
     month: 'long',
     day: 'numeric'
   });
-
-  console.log("COOR SYSTEM", x_coor_system)
 
   if(x_coor_system == 4) {
       return (

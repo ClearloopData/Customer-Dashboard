@@ -16,11 +16,8 @@ import Papa from 'papaparse';
 import Image from 'next/image';
 import { signInToSharedDB } from '@/lib/firebase';
 import { getWeatherAtCoords, getForecastAtCoords } from '@/lib/weather';
-import RadarMap from '@/components/RadarMap';
 import Dashboard from '@/components/Dashboard';
-import PieSlice from '@/components/PieSlice';
 import {project_name_to_region, project_name_to_firebase_name, project_name_to_max_mwh, project_name_to_lat_lon} from '@/components/projectData';
-
 
 
 export default function DashboardPage() {
@@ -51,37 +48,21 @@ export default function DashboardPage() {
     const [weatherData, setWeatherData] = useState<any>(null);
     //track if we're logged into shared user BEFORE attempting to get data from firebase
     const [dbReady, setDbReady] = useState(false);
-    //automatically refresh data every 5 minutes
-    const [refreshCount, setRefreshCount] = useState(0);
-    
-    // TODO: comment if this works
+    //subset of projects & regions that are relevant to customer 
+    //determined dynmaically by reading the CSV file (sourced from Quickbase)
     const [relevantProjects, setRelevantProjects] = useState<Array<string>>([]);
     const [relevantRegions, setRelevantRegions] = useState<Array<string>>([]);
-    
+    //automatically refresh data every 5 minutes
+    const [refreshCount, setRefreshCount] = useState(0);
 
 
-
-    /*
-    DATA STRUCTURES
-    */
 
     //customer company (this will always be known by the time of 
     // login in the future, although it won't be hard-coded like 
     // this obviously)
     const CUSTOMER_COMPANY: string = "Rivian";
 
-    
 
-
-
-
-    
-
-    interface CSVRow {
-        "Clearloop Partner": string;
-        "Project Name": string;
-        [key: string]: any;
-    }
 
     /*
     EFFECT HOOKS
@@ -98,6 +79,11 @@ export default function DashboardPage() {
     }, []);
 
     //React hook to fetch data from csv file
+     interface CSVRow {
+        "Clearloop Partner": string;
+        "Project Name": string;
+        [key: string]: any;
+    }
     useEffect(() => {
         const fetchCSV = async () => {
             const response = await fetch('/data/CombinedProjectData.csv');
@@ -135,8 +121,6 @@ export default function DashboardPage() {
 
         fetchCSV();
     }, [refreshCount]);
-
-
 
     //React hook to fetch moer data from Firebase
     useEffect(() => {
@@ -264,8 +248,6 @@ export default function DashboardPage() {
                 }
                 filtered_realtime_data["lastHour"] = filtered_lastHour_data;
 
-                console.log("REALTIME DATA", filtered_realtime_data)
-
                 //set data
                 setRealtimeData(filtered_realtime_data);
 
@@ -370,7 +352,7 @@ export default function DashboardPage() {
 
     }, [weatherReady, user, loading, refreshCount]);
 
-    // Makes React wait to call calculateStats until all three datasets are available
+    //Makes React wait to call calculateStats until all three datasets are available
     useEffect(() => {
 
         if (csvData != undefined && moerData != undefined && healthData != undefined && realtimeData != undefined && historicalData != undefined && weatherData != undefined) {
@@ -379,8 +361,7 @@ export default function DashboardPage() {
         }
     }, [csvData, moerData, healthData, realtimeData, historicalData, weatherData]);
 
-
-    // React effect for waiting 5 minutes, then refreshing the data
+    //React effect for waiting 5 minutes, then refreshing the data
     useEffect(() => {
         const interval = setInterval(() => {
             console.log("Refreshing data...");
@@ -390,12 +371,14 @@ export default function DashboardPage() {
         return () => clearInterval(interval);
     }, []);
 
+  
+    /*
 
+    FUNCTIONS
 
+    */
 
-
-
-
+    //fetches all data (used for data auto-refresh every 5 minutes)
     async function fetchAllData() {
 
         const [csvReady, moerReady, healthReady, realReady, histReady, weatherReady] =
@@ -421,32 +404,8 @@ export default function DashboardPage() {
         }
     }
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            fetchAllData(); //refetch the most recent Firebase data and recalculate stats
-        }, 300000); //5 minutes 
-
-        return () => clearInterval(interval);
-    }, [csvData, moerData, healthData, realtimeData, historicalData, weatherData]);
-
-
-
-
-
-
-
-    /*
-
-    FUNCTIONS
-
-    */
-
-    
-    
-        
-
-
     //large function to calculcate all interesting statistics, given the above data
+    //large, messy function; ideally clean this up before a production version of code
     function calculateStats(csvData: any, moerData: any, healthData: any, realtimeData: any, historicalData: any, weatherData: any) {
 
         //maps project name (str) to total percent of project (num)
@@ -542,9 +501,6 @@ export default function DashboardPage() {
 
             to_ret["projects"].push(project);
 
-            // console.log("TOTALS   proj: ", project, "production: ", production,"moer: ", marginal_operating_emissions_rate, "lbs carbon avoided", carbon_avoided);
-
-            // console.log(customer_company, "at", project,"avoided", customer_company_carbon_avoided, "lbs of carbon in the last hour because they generated", customer_company_production, "MWh of electricity\n\n")
         }
 
 
@@ -717,51 +673,8 @@ export default function DashboardPage() {
         to_ret["weatherForcastData"] = filteredWeatherForcastData;
 
 
-        //stats for figures
-        let capacity = Math.trunc(to_ret["total"]["Capacity (%)"] * 100 * 100) / 100;
-        to_ret["dials"] = [];
-        to_ret["dials"]["total_dial"] = [
-        {
-            label: "Overall",
-            capacity: capacity, 
-            color: capacityToColor(capacity/100)
-        }]
-
-        to_ret["dials"]["site_dials"] = [];
-        let temp_dial_holder = []
-        for(let project_num in to_ret["projects"]) {
-
-            capacity = Math.trunc(to_ret[to_ret["projects"][project_num]]["Capacity (%)"] * 100 * 100) / 100;
-
-            temp_dial_holder.push(
-                {
-                    label: to_ret["projects"][project_num],
-                    capacity: capacity, 
-                    color: capacityToColor(capacity/100)
-                }
-            )
-        }
-        to_ret["dials"]["site_dials"] = temp_dial_holder;
-
         return (to_ret)
 
-    }
-
-    // generates rgb string (spanning red to green) given a capacity value
-    function capacityToColor(capacity: number) {
-        capacity = Math.min(Math.max(capacity, 0), 1);
-
-        let r, g;
-
-        if (capacity < 0.5) {
-            r = 255;
-            g = Math.round(255 * (capacity / 0.5));
-        } else {
-            g = 255;
-            r = Math.round(255 * (1 - (capacity - 0.5) / 0.5));
-        }
-
-        return `rgb(${r}, ${g}, 0)`;
     }
 
     return (
@@ -781,6 +694,7 @@ export default function DashboardPage() {
                     Log Out
                 </button>
 
+                {/* BELOW CODE DISPLAYS ALL STATS ON MAIN PAGE FOR TROUBLESHOOTING */}
                 {/* <div className="mt-6 p-4 bg-green-100 rounded shadow text-left">
                     <h2 className="text-xl font-semibold text-black">Company:</h2>
                     <pre className="mt-2 text-lg whitespace-pre-wrap text-black">

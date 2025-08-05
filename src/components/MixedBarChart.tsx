@@ -5,6 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
+//bar chart for dashboard; see Dashboard.tsx for usage example
 export default function MixedBarChart({
   data,
   projects,

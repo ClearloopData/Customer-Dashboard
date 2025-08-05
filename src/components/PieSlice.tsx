@@ -14,10 +14,10 @@ export default function PieSlice({ radius = 100, startAngle = 0, endAngle = 90, 
   const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
   const d = [
-    `M ${radius} ${radius}`,           // Move to center
-    `L ${start.x} ${start.y}`,         // Line to start angle
-    `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`, // Arc
-    "Z"                                // Close path
+    `M ${radius} ${radius}`,           //centered
+    `L ${start.x} ${start.y}`,         //angle that line starts at
+    `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`, //arc
+    "Z"                                //close the path
   ].join(" ");
 
   return (

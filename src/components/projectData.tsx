@@ -1,3 +1,5 @@
+//this file contains much (ideally in the future, all) of the hard-coded data for the dashboard
+
 //mapping project name (as in csv) to its watttime abreviated region (firebase db)
 export const project_name_to_region: Record<string, string> = {
     "Arcadia South": "MISO_LOWER_MS_RIVER",
