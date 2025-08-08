@@ -73,6 +73,8 @@ Development
     - Download logo pngs for other companies (I only bothered with Rivian's logo)
 - Community partnerships: collaborate with them to finish the cell
 - Visual overview of solar farms: source better images/content for that cell
+- Create button that auto-generates a pdf report of the data that the customer company can distribute
+    - Ideally allow capibility to select specific time frames, projects, etc
 - Settings menu
     - Light mode
     - Accessibility features
